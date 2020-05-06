@@ -1,0 +1,3 @@
+tasks:
+  - init: npm install
+    command: npx npm run android && npx npm run start
