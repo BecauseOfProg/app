@@ -1,17 +1,49 @@
-# BecauseOfProg
-## Application Android
+<div align="center">
+  <div style="display: flex">
+    <img src="./docs/device_mockup.png" alt="App screen" width="40%"/>
+    <h1>BecauseOfProg's mobile app</h1>
+  </div>
+  <h3>The fastest way to read articles from the team</h3>
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/github/license/BecauseOfProg/app"/>
+  </a>
+</div>
 
-Application officielle de la BecauseOfProg, réalisée en #ReactNative par [@kernoeb](https://github.com/kernoeb).
-Le code de l'application est 100% open-source.
+- [📥 Get the app](#-get-the-app)
+- [🌈 How it works](#-how-it-works)
+- [💻 Development](#-development)
+  - [Prerequisites](#-prerequisites)
+  - [Setup](#setup)
+- [📜 Credits](#-credits)
+- [🔐 License](#-license)
 
-N'hésitez pas à PR ou à envoyer des issues ! :sunglasses:
+## 📥 Get the app
 
+TODO
 
+## 🌈 How it works
 
-### Remerciements et tests : 
+It's a React Native app
 
-- [Gildas](https://github.com/Gildas-GH)
-- [Exybore](https://github.com/exybore)
-- [Whaxion](https://github.com/whaxion)
-- [Selim](https://github.com/selimgr)
-- (Ma famille)
+## 💻 Development
+
+### Prerequisites
+
+TODO
+
+### Setup
+
+TODO
+
+## 📜 Credits
+
+- Maintainer: [kerboeb](https://github.com/kernoeb)
+- Special thanks to :
+  - [Gildas GH](https://github.com/Gildas-GH) (BecauseOfProg)
+  - [exybore](https://github.com/exybore) (BecauseOfProg)
+  - [Whaxion](https://github.com/whaxion) (BecauseOfProg)
+  - [Selim](https://github.com/selimgr)
+
+## 🔐 License
+
+GNU GPL v3. See [license file](./LICENSE)
