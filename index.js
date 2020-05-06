@@ -1,5 +1,7 @@
 /**
- * @format
+ * @author kernoeb
+ * @author BecauseOfProg
+ * @license GNU General Public License v3.0
  */
 
 import {AppRegistry} from 'react-native';
