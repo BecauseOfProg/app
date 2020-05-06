@@ -37,7 +37,7 @@ TODO
 
 ## 📜 Credits
 
-- Maintainer: [kerboeb](https://github.com/kernoeb)
+- Maintainer: [kernoeb](https://github.com/kernoeb)
 - Special thanks to :
   - [Gildas GH](https://github.com/Gildas-GH) (BecauseOfProg)
   - [exybore](https://github.com/exybore) (BecauseOfProg)
