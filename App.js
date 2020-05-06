@@ -20,6 +20,10 @@ import {
 } from 'react-native-paper';
 import {Cache} from 'react-native-cache';
 
+import changeNavigationBarColor, {
+  showNavigationBar,
+} from 'react-native-navigation-bar-color';
+
 import {TabBar, TabView} from 'react-native-tab-view';
 
 import MyWebComponent from './components/views/articleView';
@@ -100,7 +104,7 @@ const darktheme = {
 };
 
 const lightsb = '#edebeb';
-const darksb = '#000';
+const darksb = '#000000';
 
 const cache = new Cache({
   namespace: 'everything',
@@ -374,10 +378,16 @@ function Main({navigation, route}) {
         setTh(darktheme);
         setSt(darkstyles);
         setSBC(darksb);
+        try {
+          changeNavigationBarColor(darksb, true);
+        } catch {}
       } else {
         setTh(theme);
         setSt(styles);
         setSBC(lightsb);
+        try {
+          changeNavigationBarColor(lightsb, true);
+        } catch {}
       }
       AsyncStorage.setItem('@theme', t);
       setCT(t);
@@ -388,7 +398,7 @@ function Main({navigation, route}) {
 
   return (
     <PaperProvider theme={tH}>
-      <StatusBar backgroundColor={statusbarcolor} />
+      <StatusBar translucent={false} backgroundColor={statusbarcolor} />
 
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
@@ -465,6 +475,10 @@ const Stack = createStackNavigator();
 const initialLayout = {width: Dimensions.get('window').width};
 
 function App() {
+  useEffect(() => {
+    changeNavigationBarColor('#edebeb', true);
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
