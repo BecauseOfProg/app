@@ -136,6 +136,7 @@ export default React.memo(function Credits({route, navigation}) {
           <Text
             onPress={() => Linking.openURL('https://becauseofprog.fr')}
             style={{
+              color: 'rgba(255,81,76,1)',
               marginTop: 10,
               fontSize: 15,
               fontFamily: 'monospace',

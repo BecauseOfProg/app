@@ -29,11 +29,41 @@ It's a React Native app
 
 ### Prerequisites
 
-TODO
+- react-native 0.62.x  
+- Android Studio (or Android SDK)
 
 ### Setup
 
-TODO
+##### Fast refresh mode (development mode)
+
+```bash
+npx npm run android
+npx npm run start
+``` 
+
+##### Build bundle
+
+- Cli
+
+`react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"`
+
+- Android Studio
+
+    1. Build (top menu)
+    2. Generate (Signed) Bundle/APK 
+    3. Choose Android App Bundle
+
+##### Build apk
+
+- Cli
+
+`cd android && ./gradlew clean && ./gradlew app:assembleRelease`
+
+- Android Studio
+
+    1. Build (top menu)
+    2. Generate (Signed) Bundle/APK 
+    3. Choose APK
 
 ## 📜 Credits
 

@@ -457,11 +457,11 @@ function Main({navigation, route}) {
               title="Crédits"
             />
             <Divider />
-            <MenuItemDC
+            {/*<MenuItemDC
               icon="settings-outline"
               onPress={() => {}}
               title="Paramètres"
-            />
+            />*/}
           </Menu>
         </Appbar.Header>
         {TV}
