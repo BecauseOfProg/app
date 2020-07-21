@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   ScrollView,
   Share,
-  StyleSheet,
   Text,
   View,
 } from 'react-native';
@@ -18,8 +17,6 @@ import AutoHeightWebView from 'react-native-autoheight-webview';
 import {
   Appbar,
   Card,
-  DarkTheme,
-  DefaultTheme,
   FAB,
   Portal,
   Provider as PaperProvider,
@@ -30,56 +27,9 @@ import {Cache} from 'react-native-cache';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 
+import {useSelector} from 'react-redux';
+
 const WEBSITE_ROOT = 'https://becauseofprog.fr/article/';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
-  header: {
-    backgroundColor: '#FFF',
-  },
-});
-
-const darkstyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  header: {
-    backgroundColor: '#000',
-  },
-});
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#e33733',
-    accent: '#e33733',
-  },
-  roundness: 20,
-};
-
-const darktheme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    primary: '#e33733',
-    accent: '#e33733',
-  },
-  roundness: 20,
-};
-
-const textlight = '#f6f8fa';
-const textblack = '#000';
-
-const codeblockcolorlight = '#f6f8fa';
-const codeblockcolordark = '#242424';
-
-const darklinks = '#e33733';
-const lightlinks = '#242424';
 
 async function shareURL(url) {
   try {
@@ -112,32 +62,10 @@ export default React.memo(function MyWebComponent({route, navigation}) {
   const [snackbarhc, setSBHc] = useState(false);
   const [snackbarcache, setSBCache] = useState(false);
 
-  const [tH, setTh] = useState(theme);
-  const [sT, setSt] = useState(styles);
-  const [textColor, setTC] = useState(textblack);
-  const [codeColor, setCC] = useState(textlight);
-  const [linksColor, setLC] = useState(textlight);
-
-  function switchTheme(t) {
-    try {
-      if (t === 'dark') {
-        setTh(darktheme);
-        setSt(darkstyles);
-        setTC(textlight);
-        setCC(codeblockcolordark);
-        setLC(darklinks);
-      } else {
-        setTh(theme);
-        setSt(styles);
-        setTC(textblack);
-        setCC(codeblockcolorlight);
-        setLC(lightlinks);
-      }
-    } catch (e) {}
-  }
+  const stateTheme = useSelector((state) => state.theme);
 
   useEffect(() => {
-    switchTheme(route.params.theme);
+    //switchTheme(route.params.theme);
     getContent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -157,7 +85,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
     cache
       .set('@offline_post_' + route.params.url, JSON.stringify(responseData))
       .then((r) => {
-        console.log("Sauvegarde de l'article dans le cache effectuée");
+        // console.log("Sauvegarde de l'article dans le cache effectuée");
         if (showSnackbar) {
           setSBCache(true);
         }
@@ -191,11 +119,11 @@ export default React.memo(function MyWebComponent({route, navigation}) {
       .catch(() => {
         cache.get('@offline_post_' + route.params.url).then((value) => {
           if (value !== undefined && value !== null) {
-            console.log(
-              "Récupération de l'article : " +
-                route.params.url +
-                ' hors connexion',
-            );
+            // console.log(
+            //   "Récupération de l'article : " +
+            //     route.params.url +
+            //     ' hors connexion',
+            // );
             setEverything(JSON.parse(value));
             setSBHc(true);
           } else {
@@ -211,10 +139,10 @@ export default React.memo(function MyWebComponent({route, navigation}) {
   const AppbarBackActionDC = withPreventDoubleClick(Appbar.BackAction);
 
   return (
-    <PaperProvider theme={tH}>
+    <PaperProvider theme={stateTheme.theme}>
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
-        theme={theme}
+        theme={stateTheme.theme}
         visible={snackbarhc}
         duration={2000}
         onDismiss={() => setSBHc(false)}>
@@ -223,15 +151,15 @@ export default React.memo(function MyWebComponent({route, navigation}) {
 
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
-        theme={theme}
+        theme={stateTheme.theme}
         visible={snackbarcache}
         duration={500}
         onDismiss={() => setSBCache(false)}>
         Enregistrement dans le cache effectué
       </Snackbar>
 
-      <SafeAreaView style={sT.container}>
-        <Appbar.Header style={sT.header}>
+      <SafeAreaView style={stateTheme.styles.container}>
+        <Appbar.Header style={stateTheme.styles.header}>
           <AppbarBackActionDC
             color="#e33733"
             onPress={() => navigation.goBack()}
@@ -312,25 +240,25 @@ export default React.memo(function MyWebComponent({route, navigation}) {
                         textAlign: 'justify',
                       },
                       text: {
-                        color: textColor,
+                        color: stateTheme.others.text,
                       },
                       code_block: {
-                        color: textColor,
-                        backgroundColor: codeColor,
+                        color: stateTheme.others.text,
+                        backgroundColor: stateTheme.others.codeblockcolor,
                       },
                       fence: {
-                        color: textColor,
-                        backgroundColor: codeColor,
+                        color: stateTheme.others.text,
+                        backgroundColor: stateTheme.others.codeblockcolor,
                       },
                       code_inline: {
-                        color: textColor,
-                        backgroundColor: codeColor,
+                        color: stateTheme.others.text,
+                        backgroundColor: stateTheme.others.codeblockcolor,
                         fontSize: 20,
                         fontStyle: 'normal',
                       },
                       blockquote: {
-                        color: textColor,
-                        backgroundColor: codeColor,
+                        color: stateTheme.others.text,
+                        backgroundColor: stateTheme.others.codeblockcolor,
                         fontStyle: 'italic',
                       },
                       heading3: {
@@ -370,13 +298,13 @@ export default React.memo(function MyWebComponent({route, navigation}) {
                   customStyle={`
                   * {
                     text-align: justify;
-                    color: ${textColor}
+                    color: ${stateTheme.others.codeblockcolor}
                   }
                   p {
                     font-size: 16px;
                   }
                   a {
-                    color: ${linksColor}
+                    color: ${stateTheme.others.links}
                   }
                 `}
                 />

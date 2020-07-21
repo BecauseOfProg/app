@@ -5,8 +5,6 @@ import {
   Banner,
   Card,
   Chip,
-  DarkTheme,
-  DefaultTheme,
   Paragraph,
   Provider as PaperProvider,
   Title,
@@ -19,91 +17,20 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   View,
 } from 'react-native';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
-  item: {
-    padding: 0,
-  },
-  scene: {
-    flex: 1,
-  },
-  header: {
-    backgroundColor: '#FFF',
-  },
-  onglets: {
-    backgroundColor: 'rgba(255,81,76,1)',
-  },
-});
-
-const darkstyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000000',
-  },
-  item: {
-    padding: 0,
-  },
-  scene: {
-    flex: 1,
-  },
-  header: {
-    backgroundColor: '#000',
-  },
-  onglets: {
-    backgroundColor: '#121212',
-  },
-});
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#e33733',
-    accent: '#f1c40f',
-  },
-  roundness: 20,
-};
-
-const darktheme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    primary: '#e33733',
-    accent: '#f1c40f',
-  },
-  roundness: 20,
-};
+import {useSelector} from 'react-redux';
 
 export default React.memo(function Search({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [val, setValues] = useState(null);
   const [banner, setBanner] = useState(false);
 
-  const [tH, setTh] = useState(theme);
-  const [sT, setSt] = useState(styles);
-
-  function switchTheme(t) {
-    try {
-      if (t === 'dark') {
-        setTh(darktheme);
-        setSt(darkstyles);
-      } else {
-        setTh(theme);
-        setSt(styles);
-      }
-    } catch (e) {}
-  }
+  const stateTheme = useSelector((state) => state.theme);
 
   useEffect(() => {
-    switchTheme(route.params.theme);
     getPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -157,9 +84,12 @@ export default React.memo(function Search({route, navigation}) {
   const AppbarBackActionDC = withPreventDoubleClick(Appbar.BackAction);
 
   return (
-    <PaperProvider theme={tH}>
-      <SafeAreaView style={sT.container}>
-        <Appbar.Header style={{backgroundColor: sT.container.backgroundColor}}>
+    <PaperProvider theme={stateTheme.theme}>
+      <SafeAreaView style={stateTheme.styles.container}>
+        <Appbar.Header
+          style={{
+            backgroundColor: stateTheme.styles.container.backgroundColor,
+          }}>
           <AppbarBackActionDC
             color="#e33733"
             onPress={() => {

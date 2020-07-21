@@ -18,7 +18,7 @@ export default React.memo(function CardView(props) {
         onPress={() => {
           props.navigation.push('WebView', {
             url: props.item.url,
-            theme: props.currentTheme,
+            // theme: props.currentTheme,
           });
         }}
         style={{marginTop: props.top}}>

@@ -6,11 +6,9 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import withPreventDoubleClick from './components/utils/withPreventDoubleClick';
+import withPreventDoubleClick from './src/components/utils/withPreventDoubleClick';
 import {
   Appbar,
-  DarkTheme,
-  DefaultTheme,
   Divider,
   Menu,
   Provider as PaperProvider,
@@ -18,18 +16,15 @@ import {
   Snackbar,
   Text,
 } from 'react-native-paper';
-import {Cache} from 'react-native-cache';
 
-import changeNavigationBarColor, {
-  showNavigationBar,
-} from 'react-native-navigation-bar-color';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
 import {TabBar, TabView} from 'react-native-tab-view';
 
-import MyWebComponent from './components/views/articleView';
-import Categories from './components/views/Categories';
-import Search from './components/screens/Search';
-import Credits from './components/screens/Credits';
+import MyWebComponent from './src/components/views/articleView';
+import Categories from './src/components/views/Categories';
+import Search from './src/components/screens/Search';
+import Credits from './src/components/screens/Credits';
 
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
@@ -38,81 +33,16 @@ import {
   Dimensions,
   SafeAreaView,
   StatusBar,
-  StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
 
 import {SvgUri} from 'react-native-svg';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F0F0F0',
-  },
-  item: {
-    padding: 0,
-  },
-  scene: {
-    flex: 1,
-  },
-  header: {
-    backgroundColor: '#FFF',
-  },
-  onglets: {
-    backgroundColor: 'rgba(255,81,76,1)',
-  },
-});
+import {Provider as StateProvider, useDispatch, useSelector} from 'react-redux';
+import store from './src/redux/store';
 
-const darkstyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000000',
-  },
-  item: {
-    padding: 0,
-  },
-  scene: {
-    flex: 1,
-  },
-  header: {
-    backgroundColor: '#000',
-  },
-  onglets: {
-    backgroundColor: '#121212',
-  },
-});
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#e33733',
-    accent: '#f1c40f',
-  },
-  roundness: 20,
-};
-
-const darktheme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    primary: '#e33733',
-    accent: '#f1c40f',
-  },
-  roundness: 20,
-};
-
-const lightsb = '#edebeb';
-const darksb = '#000000';
-
-const cache = new Cache({
-  namespace: 'everything',
-  policy: {
-    maxEntries: 50000,
-  },
-  backend: AsyncStorage,
-});
+import {changeTheme} from './src/redux/reducer';
 
 function Main({navigation, route}) {
   const [searchBar, setSearchBar] = useState(false);
@@ -122,20 +52,14 @@ function Main({navigation, route}) {
   const [snackbarcache, setSBCache] = useState(false);
   const [snackbarcachearticle, setSBCacheArticle] = useState(false);
 
+  const stateTheme = useSelector((state) => state.theme);
+  const dispatch = useDispatch();
+
   const [index, setIndex] = useState(0);
 
   const [banner, setBanner] = useState(false);
 
-  const [everything, setEverything] = useState(null);
-
-  const [refresh, setRefresh] = useState(null);
-
   const sb = useRef(null);
-
-  const [tH, setTh] = useState(theme);
-  const [sT, setSt] = useState(styles);
-  const [statusbarcolor, setSBC] = useState(lightsb);
-  const [currentTheme, setCT] = useState('light');
 
   useEffect(() => {
     if (route.params?.err) {
@@ -146,10 +70,16 @@ function Main({navigation, route}) {
   useEffect(() => {
     if (snackbar) {
       setTimeout(() => {
-        if (currentTheme === 'dark') {
-          switchTheme('white');
+        let theme_light = 'light';
+        let theme_dark = 'dark';
+        if (stateTheme.t === theme_dark) {
+          AsyncStorage.setItem('@theme', theme_light).then(() => {
+            dispatch(changeTheme(theme_light));
+          });
         } else {
-          switchTheme('dark');
+          AsyncStorage.setItem('@theme', theme_dark).then(() => {
+            dispatch(changeTheme(theme_dark));
+          });
         }
       }, 50);
     }
@@ -157,26 +87,24 @@ function Main({navigation, route}) {
   }, [snackbar]);
 
   useEffect(() => {
-    console.log('Composant monté avec succès.');
+    // console.log('Composant monté avec succès.');
+    // console.log('APP.JS ' + stateTheme.theme);
     try {
       AsyncStorage.getItem('@theme').then((v) => {
         if (v === null) {
-          AsyncStorage.setItem('@theme', 'white').then(() => {
-            switchTheme('white');
-            SplashScreen.hide();
-            getPosts();
-            setCT('white');
+          AsyncStorage.setItem('@theme', 'light').then(() => {
+            dispatch(changeTheme('light'));
+            // SplashScreen.hide();
           });
         } else {
-          switchTheme(v);
-          setCT(v);
-          SplashScreen.hide();
-          getPosts();
+          // console.log('V: ' + v);
+          dispatch(changeTheme(v));
+          // SplashScreen.hide();
         }
       });
     } catch (e) {
+      // console.log('Error');
       SplashScreen.hide();
-      getPosts();
     }
   }, []);
 
@@ -184,55 +112,10 @@ function Main({navigation, route}) {
     setBanner(false);
   }
 
-  const getAllPosts = useCallback(() => {
-    getPosts();
-  }, []);
-
-  /*  const showErrorCache = useCallback(() => {
-      showErrorArticle();
-    }, []);*/
-
   const closeBanners = useCallback(() => {
+    // console.log('Close all banners');
     closeAllBanners();
   }, []);
-
-  function getPosts() {
-    console.log('App.js -> called getPosts');
-    cache.get('@offlineposts').then((value) => {
-      if (value !== undefined && value !== null) {
-        console.log('Récupération des articles hors connexion');
-        setEverything(JSON.parse(value));
-      }
-    });
-    setTimeout(() => {
-      fetch('https://api.becauseofprog.fr/v1/blog-posts', {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => response.json())
-        .then((responseData) => {
-          console.log(
-            'Connecté ! Récupération des fichiers obtenus par la requête.',
-          );
-          // setConnected(true);
-          let j = responseData.data;
-          setBanner(false);
-          setEverything(j);
-          cache.set('@offlineposts', JSON.stringify(j)).then((r) => {
-            console.log('Sauvegarde connexion effectuée');
-            setSBCache(true);
-          });
-        })
-        .catch(() => {
-          setBanner(true);
-          setRefresh((r) => !r);
-          // setConnected(false);
-        });
-    }, 100);
-  }
 
   // Categories - Title
   const [routes] = useState([
@@ -256,12 +139,9 @@ function Main({navigation, route}) {
       <Categories
         navigation={navigation}
         categoryTitle={route.key}
-        everything={everything}
-        refresh={refresh}
         banner={banner}
-        gP={getAllPosts}
         closeAllBanners={closeBanners}
-        currentTheme={currentTheme}
+        stateTheme={stateTheme} // TODO Theme category
       />
     );
   };
@@ -273,7 +153,7 @@ function Main({navigation, route}) {
       tabStyle={{width: 'auto'}}
       bounces={false}
       indicatorStyle={{backgroundColor: 'white'}}
-      style={sT.onglets}
+      style={stateTheme.styles.onglets}
       renderLabel={({route, focused, color}) => (
         <Text
           style={{
@@ -343,11 +223,11 @@ function Main({navigation, route}) {
         onChangeText={(a) => setQuery(a)}
         value={query}
         placeholder="Rechercher un article"
-        onIconPress={() =>
-          navigation.push('Search', {search: query, theme: currentTheme})
+        onIconPress={
+          () => navigation.push('Search', {search: query, theme: 'light'}) // TODO Theme search
         }
-        onSubmitEditing={() =>
-          navigation.push('Search', {search: query, theme: currentTheme})
+        onSubmitEditing={
+          () => navigation.push('Search', {search: query, theme: 'light'}) // TODO Theme search
         }
         inputStyle={{fontSize: 12, padding: 5}}
         style={{flex: 1, height: 30, marginLeft: 10}}
@@ -372,37 +252,15 @@ function Main({navigation, route}) {
     />
   );
 
-  function switchTheme(t) {
-    try {
-      if (t === 'dark') {
-        setTh(darktheme);
-        setSt(darkstyles);
-        setSBC(darksb);
-        try {
-          changeNavigationBarColor(darksb, true);
-        } catch {}
-      } else {
-        setTh(theme);
-        setSt(styles);
-        setSBC(lightsb);
-        try {
-          changeNavigationBarColor(lightsb, true);
-        } catch {}
-      }
-      AsyncStorage.setItem('@theme', t);
-      setCT(t);
-    } catch (e) {}
-  }
-
   const MenuItemDC = withPreventDoubleClick(Menu.Item);
 
   return (
-    <PaperProvider theme={tH}>
-      <StatusBar translucent={false} backgroundColor={statusbarcolor} />
+    <PaperProvider theme={stateTheme.theme}>
+      <StatusBar translucent={false} backgroundColor={stateTheme.sb} />
 
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
-        theme={theme}
+        theme={stateTheme.theme}
         visible={snackbar}
         duration={2000}
         onDismiss={() => setSB(false)}>
@@ -411,7 +269,7 @@ function Main({navigation, route}) {
 
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
-        theme={theme}
+        theme={stateTheme.theme}
         visible={snackbarcache}
         duration={2000}
         onDismiss={() => setSBCache(false)}>
@@ -420,15 +278,15 @@ function Main({navigation, route}) {
 
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
-        theme={theme}
+        theme={stateTheme.theme}
         visible={snackbarcachearticle}
         duration={2000}
         onDismiss={() => setSBCacheArticle(false)}>
         Erreur, article indisponible.
       </Snackbar>
 
-      <SafeAreaView style={sT.container}>
-        <Appbar.Header style={sT.header}>
+      <SafeAreaView style={stateTheme.styles.container}>
+        <Appbar.Header style={stateTheme.styles.header}>
           {searchBar ? SearchBarMenu : BaseHeader}
           <Menu
             theme={{roundness: 3}}
@@ -453,7 +311,7 @@ function Main({navigation, route}) {
             <Divider />
             <MenuItemDC
               icon="information-outline"
-              onPress={() => navigation.push('Credits', {theme: currentTheme})}
+              onPress={() => navigation.push('Credits', {theme: 'light'})} // TODO Theme credits
               title="Crédits"
             />
             <Divider />
@@ -480,22 +338,24 @@ function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-          gestureEnabled: true,
-          gestureDirection: 'horizontal',
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          gestureResponseDistance: {horizontal: 200},
-        }}>
-        <Stack.Screen name="Home" component={Main} />
-        <Stack.Screen name="WebView" component={MyWebComponent} />
-        <Stack.Screen name="Search" component={Search} />
-        <Stack.Screen name="Credits" component={Credits} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <StateProvider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: false,
+            gestureEnabled: true,
+            gestureDirection: 'horizontal',
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            gestureResponseDistance: {horizontal: 200},
+          }}>
+          <Stack.Screen name="Home" component={Main} />
+          <Stack.Screen name="WebView" component={MyWebComponent} />
+          <Stack.Screen name="Search" component={Search} />
+          <Stack.Screen name="Credits" component={Credits} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </StateProvider>
   );
 }
 
