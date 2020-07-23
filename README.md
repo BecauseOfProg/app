@@ -22,7 +22,7 @@
 
 The app is being automatically compiled with Github Actions, thanks to [this project](https://github.com/realabbas/Github-Actions-React-Native).
 
-Then, the files are being send in SSH to the BecauseOfProg VPS, thanks to [this action](https://github.com/appleboy/scp-action).
+Then, the files are being send in SSH to the BecauseOfProg VPS, thanks to [this action](https://github.com/appleboy/scp-action), and available here : TODO.
 
 ## 🌈 How it works
 
@@ -38,7 +38,7 @@ This React Native app use the **[BecauseOfProg API](https://github.com/BecauseOf
 
 ### Prerequisites
 
-- react-native 0.63.x  
+- **react-native 0.63.x**
 - Android Studio (or Android SDK)
 
 ### Setup
@@ -65,9 +65,9 @@ yarn run start
 
 - Android Studio
 
-    1. Build (top menu)
-    2. Generate (Signed) Bundle/APK 
-    3. Choose Android App Bundle
+    - Build (top menu)
+    - Generate (Signed) Bundle/APK 
+    - Choose Android App Bundle
 
 ##### Build apk
 
@@ -77,9 +77,9 @@ yarn run start
 
 - Android Studio
 
-    1. Build (top menu)
-    2. Generate (Signed) Bundle/APK 
-    3. Choose APK
+    - Build (top menu)
+    - Generate (Signed) Bundle/APK 
+    - Choose APK
 
 ## 📜 Credits
 
