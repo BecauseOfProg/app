@@ -18,6 +18,7 @@ import {
   Appbar,
   Card,
   FAB,
+  Menu,
   Portal,
   Provider as PaperProvider,
   Snackbar,
@@ -26,8 +27,10 @@ import withPreventDoubleClick from '../utils/withPreventDoubleClick';
 import {Cache} from 'react-native-cache';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
+import Clipboard from '@react-native-community/clipboard';
 
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {changeTheme} from '../../redux/reducer';
 
 const WEBSITE_ROOT = 'https://becauseofprog.fr/article/';
 
@@ -49,7 +52,7 @@ const cache = new Cache({
 
 export default React.memo(function MyWebComponent({route, navigation}) {
   const [fab, setFab] = useState(false);
-  const [fabIcon, setFabIcon] = useState('share');
+  const [fabIcon, setFabIcon] = useState('dots-horizontal');
   const [page, setPage] = useState('');
   const [type, setType] = useState('');
   const [title, setTitle] = useState('');
@@ -61,14 +64,35 @@ export default React.memo(function MyWebComponent({route, navigation}) {
 
   const [snackbarhc, setSBHc] = useState(false);
   const [snackbarcache, setSBCache] = useState(false);
+  const [snackbarclipboard, setSBClipboard] = useState(false);
+  const [snackbar, setSB] = useState(false);
 
   const stateTheme = useSelector((state) => state.theme);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    //switchTheme(route.params.theme);
     getContent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (snackbar) {
+      setTimeout(() => {
+        let theme_light = 'light';
+        let theme_dark = 'dark';
+        if (stateTheme.t === theme_dark) {
+          AsyncStorage.setItem('@theme', theme_light).then(() => {
+            dispatch(changeTheme(theme_light));
+          });
+        } else {
+          AsyncStorage.setItem('@theme', theme_dark).then(() => {
+            dispatch(changeTheme(theme_dark));
+          });
+        }
+      }, 50);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [snackbar]);
 
   function setEverything(e) {
     setPage(e.data.content);
@@ -119,11 +143,6 @@ export default React.memo(function MyWebComponent({route, navigation}) {
       .catch(() => {
         cache.get('@offline_post_' + route.params.url).then((value) => {
           if (value !== undefined && value !== null) {
-            // console.log(
-            //   "Récupération de l'article : " +
-            //     route.params.url +
-            //     ' hors connexion',
-            // );
             setEverything(JSON.parse(value));
             setSBHc(true);
           } else {
@@ -132,9 +151,6 @@ export default React.memo(function MyWebComponent({route, navigation}) {
         });
       });
   }
-
-  // let jsCode =
-  //   '!function(){var e=function(e,n,t){if(n=n.replace(/^on/g,""),"addEventListener"in window)e.addEventListener(n,t,!1);else if("attachEvent"in window)e.attachEvent("on"+n,t);else{var o=e["on"+n];e["on"+n]=o?function(e){o(e),t(e)}:t}return e},n=document.querySelectorAll("a[href]");if(n)for(var t in n)n.hasOwnProperty(t)&&e(n[t],"onclick",function(e){new RegExp("^https?://"+location.host,"gi").test(this.href)||(e.preventDefault(),window.postMessage(JSON.stringify({external_url_open:this.href})))})}();';
 
   const AppbarBackActionDC = withPreventDoubleClick(Appbar.BackAction);
 
@@ -152,10 +168,28 @@ export default React.memo(function MyWebComponent({route, navigation}) {
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
         theme={stateTheme.theme}
+        visible={snackbar}
+        duration={2000}
+        onDismiss={() => setSB(false)}>
+        Changement de thème
+      </Snackbar>
+
+      <Snackbar
+        style={{marginLeft: 15, marginRight: 15}}
+        theme={stateTheme.theme}
         visible={snackbarcache}
         duration={500}
         onDismiss={() => setSBCache(false)}>
         Enregistrement dans le cache effectué
+      </Snackbar>
+
+      <Snackbar
+        style={{marginLeft: 15, marginRight: 15}}
+        theme={stateTheme.theme}
+        visible={snackbarclipboard}
+        duration={500}
+        onDismiss={() => setSBClipboard(false)}>
+        URL copiée dans le presse-papier
       </Snackbar>
 
       <SafeAreaView style={stateTheme.styles.container}>
@@ -181,7 +215,11 @@ export default React.memo(function MyWebComponent({route, navigation}) {
               Linking.openURL(WEBSITE_ROOT + url).catch(() => {});
             }}
           />
-          <Appbar.Action color="#e33733" icon="dots-vertical" />
+          <Appbar.Action
+            icon="theme-light-dark"
+            color="#e33733"
+            onPress={() => setTimeout(() => setSB(true), 50)}
+          />
         </Appbar.Header>
         {allVisible ? (
           <ScrollView>
@@ -326,10 +364,13 @@ export default React.memo(function MyWebComponent({route, navigation}) {
           icon={fabIcon}
           actions={[
             {
-              color: '#e33733',
-              icon: 'heart',
-              label: 'Aimer le post',
-              onPress: () => console.log('Pressed star'),
+              color: 'black',
+              icon: 'content-copy',
+              label: "Copier l'url",
+              onPress: () => {
+                setTimeout(() => setSBClipboard(true), 100);
+                Clipboard.setString(WEBSITE_ROOT + route.params.url);
+              },
             },
             {
               color: 'forestgreen',
@@ -343,7 +384,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
           ]}
           onStateChange={({open}) => {
             if (!open) {
-              setFabIcon('share');
+              setFabIcon('dots-horizontal');
             }
             setFab(open);
           }}
@@ -351,7 +392,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
             if (!fab) {
               setFabIcon('close');
             } else {
-              setFabIcon('share');
+              setFabIcon('dots-horizontal');
             }
           }}
         />
