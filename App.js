@@ -141,7 +141,7 @@ function Main({navigation, route}) {
         categoryTitle={route.key}
         banner={banner}
         closeAllBanners={closeBanners}
-        stateTheme={stateTheme} // TODO Theme category
+        stateTheme={stateTheme}
       />
     );
   };
@@ -223,12 +223,8 @@ function Main({navigation, route}) {
         onChangeText={(a) => setQuery(a)}
         value={query}
         placeholder="Rechercher un article"
-        onIconPress={
-          () => navigation.push('Search', {search: query, theme: 'light'}) // TODO Theme search
-        }
-        onSubmitEditing={
-          () => navigation.push('Search', {search: query, theme: 'light'}) // TODO Theme search
-        }
+        onIconPress={() => navigation.push('Search')}
+        onSubmitEditing={() => navigation.push('Search')}
         inputStyle={{fontSize: 12, padding: 5}}
         style={{flex: 1, height: 30, marginLeft: 10}}
       />
@@ -311,15 +307,10 @@ function Main({navigation, route}) {
             <Divider />
             <MenuItemDC
               icon="information-outline"
-              onPress={() => navigation.push('Credits', {theme: 'light'})} // TODO Theme credits
+              onPress={() => navigation.push('Credits')}
               title="Crédits"
             />
             <Divider />
-            {/*<MenuItemDC
-              icon="settings-outline"
-              onPress={() => {}}
-              title="Paramètres"
-            />*/}
           </Menu>
         </Appbar.Header>
         {TV}

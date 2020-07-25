@@ -8,6 +8,7 @@
     <img src="https://img.shields.io/github/license/BecauseOfProg/app"/>
   </a>
 </div>
+<br>
 
 - [📥 Get the app](#-get-the-app)
 - [🌈 How it works](#-how-it-works)
@@ -19,17 +20,25 @@
 
 ## 📥 Get the app
 
-TODO
+The app is being automatically compiled with Github Actions, thanks to [this project](https://github.com/realabbas/Github-Actions-React-Native).
+
+Then, the files are being send in SSH to the BecauseOfProg VPS, thanks to [this action](https://github.com/appleboy/scp-action), and available here : TODO.
 
 ## 🌈 How it works
 
-It's a React Native app
+This React Native app use the **[BecauseOfProg API](https://github.com/BecauseOfProg/api)** to fetch articles and some content
+
+- [React Native Paper](https://reactnativepaper.com/) is used to build some components (GUI)
+
+- [React Native Markdown Display](https://github.com/iamacup/react-native-markdown-display) is used to display markdown articles
+
+- [React Navigation](https://reactnavigation.org/) is used to switch between screens
 
 ## 💻 Development
 
 ### Prerequisites
 
-- react-native 0.62.x  
+- **react-native 0.63.x**
 - Android Studio (or Android SDK)
 
 ### Setup
@@ -41,6 +50,13 @@ npx npm run android
 npx npm run start
 ``` 
 
+or
+
+```bash
+yarn run android
+yarn run start
+```
+
 ##### Build bundle
 
 - Cli
@@ -49,30 +65,29 @@ npx npm run start
 
 - Android Studio
 
-    1. Build (top menu)
-    2. Generate (Signed) Bundle/APK 
-    3. Choose Android App Bundle
+    - Build (top menu)
+    - Generate (Signed) Bundle/APK 
+    - Choose Android App Bundle
 
 ##### Build apk
 
 - Cli
 
-`cd android && ./gradlew clean && ./gradlew app:assembleRelease`
+`cd android && ./gradlew clean && ./gradlew assembleRelease`
 
 - Android Studio
 
-    1. Build (top menu)
-    2. Generate (Signed) Bundle/APK 
-    3. Choose APK
+    - Build (top menu)
+    - Generate (Signed) Bundle/APK 
+    - Choose APK
 
 ## 📜 Credits
 
-- Maintainer: [kernoeb](https://github.com/kernoeb)
+- Maintainer: [Noéwen (kernoeb)](https://github.com/kernoeb)
 - Special thanks to :
   - [Gildas GH](https://github.com/Gildas-GH) (BecauseOfProg)
-  - [exybore](https://github.com/exybore) (BecauseOfProg)
-  - [Whaxion](https://github.com/whaxion) (BecauseOfProg)
-  - [Selim](https://github.com/selimgr)
+  - [Théo (exybore)](https://github.com/exybore) (BecauseOfProg)
+  - [Nicolas (Whaxion)](https://github.com/whaxion) (BecauseOfProg)
 
 ## 🔐 License
 
