@@ -223,8 +223,8 @@ function Main({navigation, route}) {
         onChangeText={(a) => setQuery(a)}
         value={query}
         placeholder="Rechercher un article"
-        onIconPress={() => navigation.push('Search')}
-        onSubmitEditing={() => navigation.push('Search')}
+        onIconPress={() => navigation.push('Search', {search: query})}
+        onSubmitEditing={() => navigation.push('Search', {search: query})}
         inputStyle={{fontSize: 12, padding: 5}}
         style={{flex: 1, height: 30, marginLeft: 10}}
       />
