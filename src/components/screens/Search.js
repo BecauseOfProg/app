@@ -1,32 +1,25 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {
-  Appbar,
-  Banner,
-  Card,
-  Chip,
-  Paragraph,
-  Provider as PaperProvider,
-  Title,
-} from 'react-native-paper';
+import {Appbar, Banner, Provider as PaperProvider} from 'react-native-paper';
 
 import 'react-native-gesture-handler';
 
 import {
   ActivityIndicator,
-  Image,
+  Dimensions,
+  FlatList,
   SafeAreaView,
-  ScrollView,
-  View,
 } from 'react-native';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
 
 import {useSelector} from 'react-redux';
+import CardView from '../views/CardView';
 
 export default React.memo(function Search({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [val, setValues] = useState(null);
   const [banner, setBanner] = useState(false);
+  const [update, setUpdate] = useState(false);
 
   const stateTheme = useSelector((state) => state.theme);
 
@@ -37,34 +30,23 @@ export default React.memo(function Search({route, navigation}) {
 
   function getPosts() {
     console.log('From Internet');
-    fetch('https://api.becauseofprog.fr/v1/blog-posts', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    fetch(
+      `https://api.becauseofprog.fr/v1/blog-posts?search=${route.params.search.trim()}`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
       .then((response) => response.json())
       .then((responseData) => {
         let j = responseData.data;
-
-        let final = [];
-        j.forEach((a) => {
-          let labels = a.labels.map(function (x) {
-            return x.trim().toUpperCase();
-          });
-          if (
-            a.title
-              .toUpperCase()
-              .includes(route.params.search.trim().toUpperCase()) ||
-            labels.includes(route.params.search.trim().toUpperCase())
-          ) {
-            final.push(a);
-          }
-        });
-        setValues(final);
+        setValues(j);
         setLoading(false);
         setBanner(false);
+        setUpdate(!update);
       })
       .catch(() => setBanner(true));
   }
@@ -127,58 +109,26 @@ export default React.memo(function Search({route, navigation}) {
           />
         )}
 
-        <ScrollView style={{marginTop: 10}} removeClippedSubviews={true}>
-          {val &&
-            val.map((c, index) => {
-              return [
-                <View
-                  key={index++}
-                  style={{
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    paddingBottom: 10,
-                  }}>
-                  <Card
-                    onPress={() => {
-                      navigation.push('WebView', {url: c.url});
-                    }}
-                    onLongPress={() => {}}
-                    style={{marginBottom: 0}}>
-                    <Card.Cover
-                      style={{marginBottom: 10}}
-                      source={{uri: c.banner}}
-                    />
-                    <Card.Content>
-                      <Title style={{textAlign: 'justify', lineHeight: 23}}>
-                        {c.title}
-                      </Title>
-                      <Paragraph style={{textAlign: 'justify'}}>
-                        {c.description.trim()}
-                      </Paragraph>
-                    </Card.Content>
-
-                    <View
-                      style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        marginTop: 20,
-                        marginBottom: 10,
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
-                      }}>
-                      <Chip
-                        avatar={<Image source={{uri: c.author.picture}} />}
-                        mode="flat">
-                        {c.author.displayname}
-                      </Chip>
-                      <Chip mode="flat">{dateFormatted2(c.timestamp)}</Chip>
-                      <Chip mode="flat">{c.category}</Chip>
-                    </View>
-                  </Card>
-                </View>,
-              ];
-            })}
-        </ScrollView>
+        <FlatList
+          contentContainerStyle={{paddingBottom: banner ? 250 : 105}}
+          style={{
+            minHeight: Dimensions.get('window').height,
+          }}
+          extraData={update}
+          data={val}
+          onEndReachedThreshold={0.5}
+          initialNumToRender={10}
+          keyExtractor={(item) => item.timestamp.toString()}
+          renderItem={({item, index}) => {
+            let top;
+            if (index === 0) {
+              top = 10;
+            } else {
+              top = 0;
+            }
+            return <CardView item={item} top={top} navigation={navigation} />;
+          }}
+        />
       </SafeAreaView>
     </PaperProvider>
   );

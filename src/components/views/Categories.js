@@ -16,7 +16,7 @@ import CardView from './CardView';
 import {Cache} from 'react-native-cache';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {closeBanners, openBanners} from '../../redux/reducer';
 
 const cache = new Cache({
