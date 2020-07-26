@@ -1,14 +1,47 @@
-import React from 'react';
-import {Linking, SafeAreaView, View} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {
+  Animated,
+  Image,
+  Linking,
+  PanResponder,
+  SafeAreaView,
+  View,
+} from 'react-native';
 import {Appbar, Provider as PaperProvider, Text} from 'react-native-paper';
 import {SvgUri} from 'react-native-svg';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
 import {useSelector} from 'react-redux';
+import * as Animatable from 'react-native-animatable';
 
 export default React.memo(function Credits({route, navigation}) {
   const stateTheme = useSelector((state) => state.theme);
+  const [showEA, setEA] = useState(false);
 
   const AppbarBackActionDC = withPreventDoubleClick(Appbar.BackAction);
+
+  const pan = useRef(new Animated.ValueXY()).current;
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        if (gestureState.moveY > 10 && gestureState.moveY <= 40) {
+          setEA(true);
+        } else {
+          setEA(false);
+        }
+        return Animated.event([null, {dx: pan.x, dy: pan.y}], {
+          useNativeDriver: false,
+        })(evt, gestureState);
+      },
+      onPanResponderRelease: () => {
+        setEA(false);
+        Animated.spring(pan, {
+          toValue: {x: 0, y: 0},
+          useNativeDriver: true,
+        }).start();
+      },
+    }),
+  ).current;
 
   return (
     <PaperProvider theme={stateTheme.theme}>
@@ -37,36 +70,58 @@ export default React.memo(function Credits({route, navigation}) {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <SvgUri
-            width={100}
-            height={100}
-            uri="https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/assets/logos/bop.svg"
-          />
-          <Text
+          <Animated.View
             style={{
-              fontSize: 20,
-              fontFamily: 'Roboto-Regular',
-            }}>
-            Réalisé par @kernoeb
-          </Text>
-          <Text
-            style={{
-              fontSize: 15,
-              fontFamily: 'Roboto-Regular',
-            }}>
-            Remerciements : @exybore, @gildas_gh
-          </Text>
-          <Text
-            onPress={() => Linking.openURL('https://becauseofprog.fr')}
-            style={{
-              color: 'rgba(255,81,76,1)',
-              marginTop: 10,
-              fontSize: 15,
-              fontFamily: 'monospace',
-            }}>
-            {' '}
-            https://becauseofprog.fr
-          </Text>
+              transform: [{translateX: pan.x}, {translateY: pan.y}],
+            }}
+            {...panResponder.panHandlers}>
+            <Animatable.View
+              animation="pulse"
+              useNativeDriver={true}
+              duration={2000}
+              iterationCount="infinite">
+              <SvgUri
+                width={100}
+                height={100}
+                uri="https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/assets/logos/bop.svg"
+              />
+            </Animatable.View>
+          </Animated.View>
+          {!showEA ? (
+            <View>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontFamily: 'Roboto-Regular',
+                }}>
+                Réalisé par @kernoeb
+              </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: 'Roboto-Regular',
+                }}>
+                Remerciements : @exybore, @gildas_gh
+              </Text>
+              <Text
+                onPress={() => Linking.openURL('https://becauseofprog.fr')}
+                style={{
+                  color: 'rgba(255,81,76,1)',
+                  marginTop: 10,
+                  fontSize: 15,
+                  fontFamily: 'monospace',
+                }}>
+                https://becauseofprog.fr
+              </Text>
+            </View>
+          ) : (
+            <Image
+              style={{width: 300, height: 300}}
+              source={{
+                uri: `https://cataas.com/cat?${Date.now()}`,
+              }}
+            />
+          )}
         </View>
       </SafeAreaView>
     </PaperProvider>
