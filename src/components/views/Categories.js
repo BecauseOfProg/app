@@ -41,7 +41,6 @@ export default React.memo(function Categories(props) {
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [val, setValues] = useState(null);
-  // const [banner, setBanner] = useState(false);
 
   // STATES
   const banner = useSelector((state) => state.banner);
@@ -52,10 +51,6 @@ export default React.memo(function Categories(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const list = useRef(null);
 
-  // useEffect(() => {
-  //
-  // }, [props.categoryTitle]);
-
   function loadMore() {
     setCurrentPage(currentPage + 1);
   }
@@ -65,8 +60,6 @@ export default React.memo(function Categories(props) {
   }, [currentPage]);
 
   function getPosts() {
-    // console.log('App.js -> called getPosts');
-    /**/
     let page = currentPage;
     let url;
     if (props.categoryTitle === 'global') {
@@ -74,8 +67,6 @@ export default React.memo(function Categories(props) {
     } else {
       url = `https://api.becauseofprog.fr/v1/blog-posts?page=${page}&category=${props.categoryTitle}`;
     }
-
-    // console.log(url);
 
     setTimeout(() => {
       fetch(url, {
@@ -87,19 +78,13 @@ export default React.memo(function Categories(props) {
       })
         .then((response) => response.json())
         .then((responseData) => {
-          // console.log(
-          //   'Connecté ! Récupération des fichiers obtenus par la requête.',
-          // );
-
           if (page <= responseData.pages) {
             let j;
             if (page === 1) {
               j = responseData.data;
               cache
                 .set('@offlineposts_' + props.categoryTitle, JSON.stringify(j))
-                .then((r) => {
-                  // console.log('Sauvegarde connexion effectuée');
-                });
+                .then((r) => {});
             } else {
               j = [...val, ...responseData.data];
             }
@@ -118,7 +103,6 @@ export default React.memo(function Categories(props) {
           if (val == null) {
             cache.get('@offlineposts_' + props.categoryTitle).then((value) => {
               if (value !== undefined && value !== null) {
-                // console.log('Récupération des articles hors connexion');
                 setValues(JSON.parse(value));
                 setLoading(false);
                 setRefreshing(false);
@@ -209,12 +193,7 @@ export default React.memo(function Categories(props) {
               top = 0;
             }
             return (
-              <CardView
-                item={item}
-                top={top}
-                navigation={props.navigation}
-                //stateTheme={props.stateTheme}
-              />
+              <CardView item={item} top={top} navigation={props.navigation} />
             );
           }}
         />

@@ -29,38 +29,27 @@ export default React.memo(function Search({route, navigation}) {
   }, []);
 
   function getPosts() {
-    console.log('From Internet');
-    fetch(
-      `https://api.becauseofprog.fr/v1/blog-posts?search=${route.params.search.trim()}`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+    if (route.params.search.trim() !== undefined) {
+      fetch(
+        `https://api.becauseofprog.fr/v1/blog-posts?search=${route.params.search.trim()}`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    )
-      .then((response) => response.json())
-      .then((responseData) => {
-        let j = responseData.data;
-        setValues(j);
-        setLoading(false);
-        setBanner(false);
-        setUpdate(!update);
-      })
-      .catch(() => setBanner(true));
-  }
-
-  function dateFormatted2(date) {
-    const d = new Date(date * 1000);
-
-    return (
-      ('0' + d.getDate()).slice(-2) +
-      '/' +
-      ('0' + d.getMonth()).slice(-2) +
-      '/' +
-      d.getFullYear()
-    ).trim();
+      )
+        .then((response) => response.json())
+        .then((responseData) => {
+          let j = responseData.data;
+          setValues(j);
+          setLoading(false);
+          setBanner(false);
+          setUpdate(!update);
+        })
+        .catch(() => setBanner(true));
+    }
   }
 
   const AppbarBackActionDC = withPreventDoubleClick(Appbar.BackAction);

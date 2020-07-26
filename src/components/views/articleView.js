@@ -18,7 +18,6 @@ import {
   Appbar,
   Card,
   FAB,
-  Menu,
   Portal,
   Provider as PaperProvider,
   Snackbar,
@@ -109,7 +108,6 @@ export default React.memo(function MyWebComponent({route, navigation}) {
     cache
       .set('@offline_post_' + route.params.url, JSON.stringify(responseData))
       .then((r) => {
-        // console.log("Sauvegarde de l'article dans le cache effectuée");
         if (showSnackbar) {
           setSBCache(true);
         }

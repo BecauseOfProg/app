@@ -87,23 +87,17 @@ function Main({navigation, route}) {
   }, [snackbar]);
 
   useEffect(() => {
-    // console.log('Composant monté avec succès.');
-    // console.log('APP.JS ' + stateTheme.theme);
     try {
       AsyncStorage.getItem('@theme').then((v) => {
         if (v === null) {
           AsyncStorage.setItem('@theme', 'light').then(() => {
             dispatch(changeTheme('light'));
-            // SplashScreen.hide();
           });
         } else {
-          // console.log('V: ' + v);
           dispatch(changeTheme(v));
-          // SplashScreen.hide();
         }
       });
     } catch (e) {
-      // console.log('Error');
       SplashScreen.hide();
     }
   }, []);
@@ -113,7 +107,6 @@ function Main({navigation, route}) {
   }
 
   const closeBanners = useCallback(() => {
-    // console.log('Close all banners');
     closeAllBanners();
   }, []);
 

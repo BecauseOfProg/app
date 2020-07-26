@@ -1,5 +1,5 @@
-import {lightsb, styles, theme, light_others} from '../theme/light';
-import {darksb, darkstyles, darktheme, dark_others} from '../theme/dark';
+import {light_others, lightsb, styles, theme} from '../theme/light';
+import {dark_others, darksb, darkstyles, darktheme} from '../theme/dark';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import SplashScreen from 'react-native-splash-screen';
 
