@@ -87,23 +87,17 @@ function Main({navigation, route}) {
   }, [snackbar]);
 
   useEffect(() => {
-    // console.log('Composant monté avec succès.');
-    // console.log('APP.JS ' + stateTheme.theme);
     try {
       AsyncStorage.getItem('@theme').then((v) => {
         if (v === null) {
           AsyncStorage.setItem('@theme', 'light').then(() => {
             dispatch(changeTheme('light'));
-            // SplashScreen.hide();
           });
         } else {
-          // console.log('V: ' + v);
           dispatch(changeTheme(v));
-          // SplashScreen.hide();
         }
       });
     } catch (e) {
-      // console.log('Error');
       SplashScreen.hide();
     }
   }, []);
@@ -113,7 +107,6 @@ function Main({navigation, route}) {
   }
 
   const closeBanners = useCallback(() => {
-    // console.log('Close all banners');
     closeAllBanners();
   }, []);
 
@@ -223,8 +216,8 @@ function Main({navigation, route}) {
         onChangeText={(a) => setQuery(a)}
         value={query}
         placeholder="Rechercher un article"
-        onIconPress={() => navigation.push('Search')}
-        onSubmitEditing={() => navigation.push('Search')}
+        onIconPress={() => navigation.push('Search', {search: query})}
+        onSubmitEditing={() => navigation.push('Search', {search: query})}
         inputStyle={{fontSize: 12, padding: 5}}
         style={{flex: 1, height: 30, marginLeft: 10}}
       />
