@@ -14,16 +14,48 @@ jobs:
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
+
+      - id: set_var
+        run: |
+          version=`cat ./android/app/build.gradle | grep versionName | xargs | cut -d' ' -f2`
+          echo $version
+          echo "::set-output name=version::$version"
+
       - name: Install npm dependencies
         run: |
           npm install
+
       - name: Build Android Release
         run: |
           cd android && chmod +x gradlew && ./gradlew assembleRelease
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: app-release.apk
+          name: apk.zip
           path: android/app/build/outputs/apk/release/
+
+      - name: Copy folder content recursively to remote
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: android/app/build/outputs/apk/release/
+          remote: uploads
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+
+      - name: Discord Webhook
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          username: "Le Livreur d'APKs"
+          color: '#3DDC84'
+          avatarUrl: 'https://cdn.discordapp.com/attachments/503884326610665475/736954066734678075/android-flat.png'
+          description: "Numéro de version: ${{ steps.set_var.outputs.version }} | Télécharge-la ici :"
+          details: 'https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/app-armeabi-v7a-release.apk'
+          footer: APK Android
+          text: "<:becauseofprog:308300785991680000> Nouvelle version de l'application **BecauseOfProg** ! :tada:"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
