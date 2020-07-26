@@ -1,6 +1,6 @@
 {
   "name": "becauseofprog",
-  "version": "1.2",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -14,7 +14,6 @@
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/clipboard": "^1.2.3",
     "@react-native-community/masked-view": "^0.1.10",
-    "@react-native-community/cli-platform-android": "^4.10.1",
     "@react-navigation/drawer": "^5.8.6",
     "@react-navigation/native": "^5.7.1",
     "@react-navigation/stack": "^5.7.1",
