@@ -25,5 +25,14 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: app-release.apk
+          name: apk.zip
           path: android/app/build/outputs/apk/release/
+      - name: Copy folder content recursively to remote
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: android/app/build/outputs/apk/release/
+          remote: uploads
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
