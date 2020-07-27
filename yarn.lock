@@ -738,6 +738,11 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
+"@gerhobbelt/markdown-it-emoji@^1.4.0-6":
+  version "1.4.0-6"
+  resolved "https://registry.yarnpkg.com/@gerhobbelt/markdown-it-emoji/-/markdown-it-emoji-1.4.0-6.tgz#5897213141f42b5d4f3d65299188a90f6f3161de"
+  integrity sha512-4jloNHLa+ztbM3FUkCwS9oKtMrJcC+lA609w0/oWWzpvnODF1+joz5rx7LgucB77K127zQzhiGaiWwVqIBjTGg==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
@@ -10262,6 +10267,11 @@ react-native-get-random-values@^1.4.0:
   integrity sha512-NnmEZcC5zfz+QEytFPM/fw818Hodw/BNbv7jGxU4pla4K2K9DCzG83IReMJqQ2wo552AYKguqrBG2SSn/U6rbA==
   dependencies:
     fast-base64-decode "^1.0.0"
+
+react-native-image-viewing@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-viewing/-/react-native-image-viewing-0.2.0.tgz#3c0bc67cfb9aa7607cec632139d7ef4c45e07e4e"
+  integrity sha512-j2JXv86WRXGNme4LPsNCJ/2MgX+oVbmJ5ZLbGrYbKXcCPe9OshqlQI5L3SdbAxWu/F5pubcMaXp0zoYNaZVuzA==
 
 react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
