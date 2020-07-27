@@ -37,6 +37,7 @@ import {
   TouchableOpacity,
   View,
   Linking,
+  TouchableNativeFeedback,
 } from 'react-native';
 
 import {SvgUri} from 'react-native-svg';
@@ -228,9 +229,17 @@ function Main({navigation, route}) {
       </TouchableOpacity>
       <Appbar.Content
         title={
-          <Text style={{color: '#e33733', fontFamily: 'Roboto-Regular'}}>
-            BecauseOfProg
-          </Text>
+          <TouchableNativeFeedback
+            onLongPress={() =>
+              Linking.openURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+                .then(() => {})
+                .catch(() => {})
+            }
+            delayLongPress={30000}>
+            <Text style={{color: '#e33733', fontFamily: 'Roboto-Regular'}}>
+              BecauseOfProg
+            </Text>
+          </TouchableNativeFeedback>
         }
         style={{flex: 1}}
       />
@@ -363,9 +372,9 @@ function Main({navigation, route}) {
             {
               label: 'Télécharger',
               onPress: () =>
-                Linking.openURL(
-                  'https://becauseofprog.fr/page/app',
-                ).then(() => {}),
+                Linking.openURL('https://becauseofprog.fr/page/app')
+                  .then(() => {})
+                  .catch(() => {}),
             },
           ]}
           icon="update">
