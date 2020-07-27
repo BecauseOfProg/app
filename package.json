@@ -33,6 +33,7 @@
     "react-native-autoheight-webview": "^1.5.2",
     "react-native-cache": "^2.0.0-rc.5",
     "react-native-cli": "^2.0.1",
+    "react-native-device-info": "^5.6.3",
     "react-native-fast-image": "^8.3.2",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-get-random-values": "^1.4.0",
