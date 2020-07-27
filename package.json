@@ -1,6 +1,6 @@
 {
   "name": "becauseofprog",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -11,6 +11,7 @@
     "android-linux": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
   },
   "dependencies": {
+    "@gerhobbelt/markdown-it-emoji": "^1.4.0-6",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/clipboard": "^1.2.3",
     "@react-native-community/masked-view": "^0.1.10",
@@ -35,8 +36,10 @@
     "react-native-cli": "^2.0.1",
     "react-native-device-info": "^5.6.3",
     "react-native-fast-image": "^8.3.2",
+    "react-native-fit-image": "^1.5.5",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-get-random-values": "^1.4.0",
+    "react-native-image-viewing": "^0.2.0",
     "react-native-markdown-display": "^6.1.6",
     "react-native-navigation-bar-color": "^2.0.1",
     "react-native-paper": "^4.0.1",

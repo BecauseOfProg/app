@@ -9,10 +9,13 @@ import {
   ScrollView,
   Share,
   Text,
+  TouchableNativeFeedback,
   View,
 } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import AutoHeightWebView from 'react-native-autoheight-webview';
+import FitImage from 'react-native-fit-image';
+import ImageViewing from 'react-native-image-viewing';
 
 import {
   Appbar,
@@ -61,10 +64,18 @@ export default React.memo(function MyWebComponent({route, navigation}) {
   const [picture, setPicture] = useState(null);
   const [allVisible, setAV] = useState(false);
 
+  const [modalPicture, setModalPicture] = useState(false);
+
   const [snackbarhc, setSBHc] = useState(false);
   const [snackbarcache, setSBCache] = useState(false);
   const [snackbarclipboard, setSBClipboard] = useState(false);
   const [snackbar, setSB] = useState(false);
+
+  const [allImages, setAllImages] = useState([]);
+  const imagesNb = {};
+  let imageCounter = 0;
+  const images = [];
+  const [imageNumber, setImageNumber] = useState(0);
 
   const stateTheme = useSelector((state) => state.theme);
   const dispatch = useDispatch();
@@ -152,6 +163,56 @@ export default React.memo(function MyWebComponent({route, navigation}) {
 
   const AppbarBackActionDC = withPreventDoubleClick(Appbar.BackAction);
 
+  const imageRule = {
+    image: (
+      node,
+      children,
+      parent,
+      styles,
+      allowedImageHandlers,
+      defaultImageHandler,
+    ) => {
+      const {src, alt} = node.attributes;
+
+      // we check that the source starts with at least one of the elements in allowedImageHandlers
+      const show =
+        allowedImageHandlers.filter((value) => {
+          return src.toLowerCase().startsWith(value.toLowerCase());
+        }).length > 0;
+
+      if (show === false && defaultImageHandler === null) {
+        return null;
+      }
+
+      const imageProps = {
+        indicator: true,
+        style: styles._VIEW_SAFE_image,
+        source: {
+          uri: show === true ? src : `${defaultImageHandler}${src}`,
+        },
+      };
+
+      if (alt) {
+        imageProps.accessible = true;
+        imageProps.accessibilityLabel = alt;
+      }
+      images.push({uri: src});
+      imagesNb[src] = imageCounter;
+      imageCounter++;
+      return (
+        <TouchableNativeFeedback
+          key={node.key}
+          onPress={() => {
+            setAllImages(images);
+            setModalPicture(true);
+            setImageNumber(imagesNb[src]);
+          }}>
+          <FitImage {...imageProps} />
+        </TouchableNativeFeedback>
+      );
+    },
+  };
+
   return (
     <PaperProvider theme={stateTheme.theme}>
       <Snackbar
@@ -162,7 +223,6 @@ export default React.memo(function MyWebComponent({route, navigation}) {
         onDismiss={() => setSBHc(false)}>
         Article hors connexion
       </Snackbar>
-
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
         theme={stateTheme.theme}
@@ -171,7 +231,6 @@ export default React.memo(function MyWebComponent({route, navigation}) {
         onDismiss={() => setSB(false)}>
         Changement de thème
       </Snackbar>
-
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
         theme={stateTheme.theme}
@@ -180,7 +239,6 @@ export default React.memo(function MyWebComponent({route, navigation}) {
         onDismiss={() => setSBCache(false)}>
         Enregistrement dans le cache effectué
       </Snackbar>
-
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
         theme={stateTheme.theme}
@@ -189,6 +247,14 @@ export default React.memo(function MyWebComponent({route, navigation}) {
         onDismiss={() => setSBClipboard(false)}>
         URL copiée dans le presse-papier
       </Snackbar>
+
+      <ImageViewing
+        images={allImages}
+        imageIndex={imageNumber}
+        presentationStyle="overFullScreen"
+        visible={modalPicture}
+        onRequestClose={() => setModalPicture(false)}
+      />
 
       <SafeAreaView style={stateTheme.styles.container}>
         <Appbar.Header style={stateTheme.styles.header}>
@@ -219,6 +285,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
             onPress={() => setTimeout(() => setSB(true), 50)}
           />
         </Appbar.Header>
+
         {allVisible ? (
           <ScrollView>
             <ImageBackground
@@ -267,6 +334,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
               {type === 'markdown' ? (
                 <View style={{padding: 15}}>
                   <Markdown
+                    rules={imageRule}
                     mergeStyle={true}
                     style={{
                       // TODO Fix Colors Dark theme
@@ -302,6 +370,9 @@ export default React.memo(function MyWebComponent({route, navigation}) {
                       },
                       heading2: {
                         fontWeight: 'bold',
+                      },
+                      list_item: {
+                        color: stateTheme.others.text,
                       },
                     }}>
                     {page}
@@ -355,14 +426,13 @@ export default React.memo(function MyWebComponent({route, navigation}) {
           />
         )}
       </SafeAreaView>
-
       <Portal>
         <FAB.Group
           open={fab}
           icon={fabIcon}
           actions={[
             {
-              color: 'black',
+              color: stateTheme.t === 'dark' ? 'white' : 'black',
               icon: 'content-copy',
               label: "Copier l'url",
               onPress: () => {
