@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import withPreventDoubleClick from './src/components/utils/withPreventDoubleClick';
 import {
   Appbar,
+  Banner,
   Divider,
   Menu,
   Provider as PaperProvider,
@@ -35,9 +36,11 @@ import {
   StatusBar,
   TouchableOpacity,
   View,
+  Linking,
 } from 'react-native';
 
 import {SvgUri} from 'react-native-svg';
+import {getVersion, supportedAbis} from 'react-native-device-info';
 
 import {Provider as StateProvider, useDispatch, useSelector} from 'react-redux';
 import store from './src/redux/store';
@@ -58,8 +61,35 @@ function Main({navigation, route}) {
   const [index, setIndex] = useState(0);
 
   const [banner, setBanner] = useState(false);
+  const [bannerUpdate, setBannerUpdate] = useState(false);
+
+  const [archs, setArchs] = useState([]);
+  const [newVersion, setNewVersion] = useState(null);
 
   const sb = useRef(null);
+
+  // UPDATES
+  useEffect(() => {
+    supportedAbis()
+      .then((abis) => {
+        setArchs(abis);
+      })
+      .catch(() => {});
+
+    fetch(
+      'https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/output-metadata.json',
+    )
+      .then((response) => response.json())
+      .then((responseData) => {
+        try {
+          if (responseData.elements[0].versionName !== getVersion()) {
+            setNewVersion(responseData.elements[0].versionName);
+            setBannerUpdate(true);
+          }
+        } catch (e) {}
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (route.params?.err) {
@@ -306,7 +336,48 @@ function Main({navigation, route}) {
             <Divider />
           </Menu>
         </Appbar.Header>
+
         {TV}
+        <Banner
+          visible={bannerUpdate}
+          style={{
+            marginBottom: 0,
+            backgroundColor: stateTheme.t === 'light' ? '#E0E0E0' : '#404040',
+          }}
+          actions={[
+            {
+              label: 'Fermer',
+              onPress: () => setBannerUpdate(false),
+            },
+            {
+              label: 'Télécharger',
+              onPress: () =>
+                Linking.openURL(
+                  'https://becauseofprog.fr/page/app',
+                ).then(() => {}),
+            },
+          ]}
+          icon="update">
+          <Text>
+            Une mise-à-jour est disponible !{' '}
+            <Text style={{fontSize: 11}}>
+              {getVersion()} -> {newVersion}
+            </Text>
+            {'\n'}
+          </Text>
+          <Text style={{fontSize: 11}}>Architectures de l'appareil : </Text>
+          {archs.map((v, i) => {
+            return i < archs.length - 1 ? (
+              <Text style={{fontSize: 9}} key={i}>
+                {v},{' '}
+              </Text>
+            ) : (
+              <Text style={{fontSize: 9}} key={i}>
+                {v}
+              </Text>
+            );
+          })}
+        </Banner>
       </SafeAreaView>
     </PaperProvider>
   );

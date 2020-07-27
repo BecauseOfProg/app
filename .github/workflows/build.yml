@@ -53,9 +53,17 @@ jobs:
           severity: info
           username: "Le Livreur d'APKs"
           color: '#3DDC84'
-          avatarUrl: 'https://cdn.discordapp.com/attachments/503884326610665475/736954066734678075/android-flat.png'
-          description: "Numéro de version: ${{ steps.set_var.outputs.version }} | Télécharge-la ici :"
-          details: 'https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/app-armeabi-v7a-release.apk'
+          avatarUrl: 'https://cdn.discordapp.com/attachments/272639040434601994/737049367877386260/android-flat.png'
+          description: "Numéro de version: ${{ steps.set_var.outputs.version }}"
+          details: |
+            **Télécharge-la ici :**
+            - [universal apk](https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/app-universal-release.apk)
+            - [armeabi-v7a](https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/app-armeabi-v7a-release.apk)
+            - [arm64-v8a](https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/app-arm64-v8a-release.apk)
+            - [app-x86_64-release.apk](https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/app-x86_64-release.apk)
+            - [app-x86-release.apk](https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/app-x86-release.apk)
+
+            Plus d'infos : [ici](https://play.google.com/store/apps/details?id=com.ytheekshana.deviceinfo)
           footer: APK Android
-          text: "<:becauseofprog:308300785991680000> Nouvelle version de l'application **BecauseOfProg** ! :tada:"
+          text: "<:becauseofprog:308300785991680000> Nouvelle version de l'app **BecauseOfProg** *(Android)* ! :tada:"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}

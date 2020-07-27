@@ -12,6 +12,7 @@ import {SvgUri} from 'react-native-svg';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
 import {useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
+import {getVersion} from 'react-native-device-info';
 
 export default React.memo(function Credits({route, navigation}) {
   const stateTheme = useSelector((state) => state.theme);
@@ -88,7 +89,18 @@ export default React.memo(function Credits({route, navigation}) {
             </Animatable.View>
           </Animated.View>
           {!showEA ? (
-            <View>
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontFamily: 'Roboto-Regular',
+                }}>
+                BecauseOfProg {getVersion()}
+              </Text>
               <Text
                 style={{
                   fontSize: 20,
@@ -110,6 +122,7 @@ export default React.memo(function Credits({route, navigation}) {
                   marginTop: 10,
                   fontSize: 15,
                   fontFamily: 'monospace',
+                  textDecorationLine: 'underline',
                 }}>
                 https://becauseofprog.fr
               </Text>

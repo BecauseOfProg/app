@@ -2,11 +2,31 @@ import FastImage from 'react-native-fast-image';
 import {Card, Chip, Paragraph, Title} from 'react-native-paper';
 import {Image, Text, View} from 'react-native';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import moment from 'moment';
+import {Cache} from 'react-native-cache';
+import AsyncStorage from '@react-native-community/async-storage';
+
+const cache = new Cache({
+  namespace: 'articles',
+  policy: {
+    maxEntries: 50000,
+  },
+  backend: AsyncStorage,
+});
 
 export default React.memo(function CardView(props) {
   const CardDC = withPreventDoubleClick(Card);
+  const [read, setRead] = useState(false);
+
+  useEffect(() => {
+    cache.get('@offline_post_' + props.item.url).then((value) => {
+      if (value !== undefined && value !== null) {
+        setRead(true);
+      }
+    });
+  });
+
   return (
     <View
       style={{
@@ -19,6 +39,11 @@ export default React.memo(function CardView(props) {
           props.navigation.push('WebView', {
             url: props.item.url,
           });
+          setTimeout(() => {
+            if (!read) {
+              setRead(true);
+            }
+          }, 350);
         }}
         style={{marginTop: props.top}}>
         <FastImage
@@ -35,7 +60,7 @@ export default React.memo(function CardView(props) {
               lineHeight: 23,
               fontFamily: 'Roboto-Regular',
             }}>
-            {props.item.title}
+            {props.item.title} {read && <Text style={{color: 'green'}}>✓</Text>}
           </Title>
           <Paragraph
             style={{
