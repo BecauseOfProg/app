@@ -116,7 +116,9 @@ export default React.memo(function Credits({route, navigation}) {
                 Remerciements : @exybore, @gildas_gh
               </Text>
               <Text
-                onPress={() => Linking.openURL('https://becauseofprog.fr')}
+                onPress={() =>
+                  Linking.openURL('https://becauseofprog.fr').catch(() => {})
+                }
                 style={{
                   color: 'rgba(255,81,76,1)',
                   marginTop: 10,

@@ -738,11 +738,6 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
-"@gerhobbelt/markdown-it-emoji@^1.4.0-6":
-  version "1.4.0-6"
-  resolved "https://registry.yarnpkg.com/@gerhobbelt/markdown-it-emoji/-/markdown-it-emoji-1.4.0-6.tgz#5897213141f42b5d4f3d65299188a90f6f3161de"
-  integrity sha512-4jloNHLa+ztbM3FUkCwS9oKtMrJcC+lA609w0/oWWzpvnODF1+joz5rx7LgucB77K127zQzhiGaiWwVqIBjTGg==
-
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
@@ -3303,6 +3298,11 @@ commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
   integrity sha1-3dgA2gxmEnOTzKWVDqloo6rxJTs=
+
+compare-versions@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/compare-versions/-/compare-versions-3.6.0.tgz#1a5689913685e5a87637b8d3ffca75514ec41d62"
+  integrity sha512-W6Af2Iw1z4CB7q4uU4hv646dW9GQuBM+YpC0UvUCWSD8w90SJjp+ujJuXaEMtAXBtSqGfMPuFOVn4/+FlaqfBA==
 
 component-emitter@^1.2.1:
   version "1.3.0"

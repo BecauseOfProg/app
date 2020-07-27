@@ -37,10 +37,12 @@ import {
   TouchableOpacity,
   View,
   Linking,
+  TouchableNativeFeedback,
 } from 'react-native';
 
 import {SvgUri} from 'react-native-svg';
 import {getVersion, supportedAbis} from 'react-native-device-info';
+import compareVersions from 'compare-versions';
 
 import {Provider as StateProvider, useDispatch, useSelector} from 'react-redux';
 import store from './src/redux/store';
@@ -82,13 +84,23 @@ function Main({navigation, route}) {
       .then((response) => response.json())
       .then((responseData) => {
         try {
-          if (responseData.elements[0].versionName !== getVersion()) {
+          if (
+            compareVersions.compare(
+              responseData.elements[0].versionName,
+              getVersion(),
+              '>',
+            )
+          ) {
             setNewVersion(responseData.elements[0].versionName);
             setBannerUpdate(true);
           }
-        } catch (e) {}
+        } catch (e) {
+          setBannerUpdate(false);
+        }
       })
-      .catch(() => {});
+      .catch(() => {
+        setBannerUpdate(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -217,9 +229,17 @@ function Main({navigation, route}) {
       </TouchableOpacity>
       <Appbar.Content
         title={
-          <Text style={{color: '#e33733', fontFamily: 'Roboto-Regular'}}>
-            BecauseOfProg
-          </Text>
+          <TouchableNativeFeedback
+            onLongPress={() =>
+              Linking.openURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+                .then(() => {})
+                .catch(() => {})
+            }
+            delayLongPress={30000}>
+            <Text style={{color: '#e33733', fontFamily: 'Roboto-Regular'}}>
+              BecauseOfProg
+            </Text>
+          </TouchableNativeFeedback>
         }
         style={{flex: 1}}
       />
@@ -352,9 +372,9 @@ function Main({navigation, route}) {
             {
               label: 'Télécharger',
               onPress: () =>
-                Linking.openURL(
-                  'https://becauseofprog.fr/page/app',
-                ).then(() => {}),
+                Linking.openURL('https://becauseofprog.fr/page/app')
+                  .then(() => {})
+                  .catch(() => {}),
             },
           ]}
           icon="update">

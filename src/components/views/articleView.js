@@ -249,10 +249,13 @@ export default React.memo(function MyWebComponent({route, navigation}) {
       </Snackbar>
 
       <ImageViewing
+        backgroundColor="#000000EE"
+        animationType="fade"
         images={allImages}
         imageIndex={imageNumber}
-        presentationStyle="overFullScreen"
+        presentationStyle="fullScreen"
         visible={modalPicture}
+        swipeToCloseEnabled={false}
         onRequestClose={() => setModalPicture(false)}
       />
 

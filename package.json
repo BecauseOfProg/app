@@ -1,6 +1,6 @@
 {
   "name": "becauseofprog",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -11,13 +11,13 @@
     "android-linux": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
   },
   "dependencies": {
-    "@gerhobbelt/markdown-it-emoji": "^1.4.0-6",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/clipboard": "^1.2.3",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/drawer": "^5.8.6",
     "@react-navigation/native": "^5.7.1",
     "@react-navigation/stack": "^5.7.1",
+    "compare-versions": "^3.6.0",
     "gatsby-plugin-manifest": "^2.4.20",
     "gatsby-plugin-sharp": "^2.6.21",
     "gatsby-remark-images-contentful": "^2.3.11",
