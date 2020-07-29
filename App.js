@@ -33,12 +33,12 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import {
   Dimensions,
+  Linking,
   SafeAreaView,
   StatusBar,
+  TouchableNativeFeedback,
   TouchableOpacity,
   View,
-  Linking,
-  TouchableNativeFeedback,
 } from 'react-native';
 
 import {SvgUri} from 'react-native-svg';

@@ -2,10 +2,8 @@ import FastImage from 'react-native-fast-image';
 import {Card, Chip, Paragraph, Title} from 'react-native-paper';
 import {Image, Text, View} from 'react-native';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import moment from 'moment';
-import {Cache} from 'react-native-cache';
-import AsyncStorage from '@react-native-community/async-storage';
 import {useSelector} from 'react-redux';
 
 export default React.memo(function CardView(props) {
@@ -38,10 +36,10 @@ export default React.memo(function CardView(props) {
             url: props.item.url,
           });
           /*setTimeout(() => {
-            if (!read) {
-              setRead(true);
-            }
-          }, 350);*/
+                      if (!read) {
+                        setRead(true);
+                      }
+                    }, 350);*/
         }}
         style={{marginTop: props.top}}>
         <FastImage

@@ -1,25 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import {Image, SafeAreaView, View, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, SafeAreaView, ScrollView, View} from 'react-native';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
-  Paragraph,
-  Button,
   Appbar,
+  Button,
   Card,
+  Dialog,
   IconButton,
   List,
+  Paragraph,
+  Portal,
   Provider as PaperProvider,
   Switch,
   Title,
-  Dialog,
-  Portal,
 } from 'react-native-paper';
 import I18n from '../utils/i18n';
 import AsyncStorage from '@react-native-community/async-storage';
 import {readArticles} from '../../redux/reducer';
-
-import {useDispatch} from 'react-redux';
 import {Cache} from 'react-native-cache';
 
 const cache = new Cache({
