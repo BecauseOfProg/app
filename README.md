@@ -84,7 +84,19 @@ yarn run start
 
 ## 🇫🇷 Translate the app
 
-You can add your own language, by editing `./src/components/utils/locales/` (\<lang\>.js) and `./src/components/utils/i18n.js`.  
+You can add your own language, by editing `./src/components/utils/locales/` (\<lang\>.js) and `./src/components/utils/i18n.js`. 
+
+You can also add a round flag icon in `./assets/images/flags/` (a 64x64 png file, please!)  
+
+Finally, add the lang in the menu by editing `./src/components/screens/Settings.js` :
+
+```js
+const langs = [
+  [require('../../../assets/images/flags/fr.png'), 'Français', 'fr-FR'],
+  [require('../../../assets/images/flags/en.png'), 'Anglais', 'en-GB'],
+];
+```
+
 Then, make a pull request <3
 
 ## 📜 Credits
