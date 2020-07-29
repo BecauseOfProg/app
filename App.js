@@ -26,18 +26,19 @@ import MyWebComponent from './src/components/views/articleView';
 import Categories from './src/components/views/Categories';
 import Search from './src/components/screens/Search';
 import Credits from './src/components/screens/Credits';
+import Settings from './src/components/screens/Settings';
 
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {
   Dimensions,
+  Linking,
   SafeAreaView,
   StatusBar,
+  TouchableNativeFeedback,
   TouchableOpacity,
   View,
-  Linking,
-  TouchableNativeFeedback,
 } from 'react-native';
 
 import {SvgUri} from 'react-native-svg';
@@ -47,7 +48,9 @@ import compareVersions from 'compare-versions';
 import {Provider as StateProvider, useDispatch, useSelector} from 'react-redux';
 import store from './src/redux/store';
 
-import {changeTheme} from './src/redux/reducer';
+import {changeTheme, readArticles} from './src/redux/reducer';
+
+import I18n from './src/components/utils/i18n';
 
 function Main({navigation, route}) {
   const [searchBar, setSearchBar] = useState(false);
@@ -68,10 +71,29 @@ function Main({navigation, route}) {
   const [archs, setArchs] = useState([]);
   const [newVersion, setNewVersion] = useState(null);
 
+  const [refresh, setRefresh] = useState(false);
+
   const sb = useRef(null);
 
   // UPDATES
   useEffect(() => {
+    AsyncStorage.getItem('@readArticles')
+      .then((b) => {
+        if (b == null || b) {
+          dispatch(readArticles(JSON.parse(b)));
+        }
+      })
+      .catch(() => {});
+
+    AsyncStorage.getItem('@lang')
+      .then((b) => {
+        if (b !== null && b !== undefined) {
+          I18n.locale = b;
+          setRefresh((r) => !r);
+        }
+      })
+      .catch(() => {});
+
     supportedAbis()
       .then((abis) => {
         setArchs(abis);
@@ -101,6 +123,7 @@ function Main({navigation, route}) {
       .catch(() => {
         setBannerUpdate(false);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -115,13 +138,17 @@ function Main({navigation, route}) {
         let theme_light = 'light';
         let theme_dark = 'dark';
         if (stateTheme.t === theme_dark) {
-          AsyncStorage.setItem('@theme', theme_light).then(() => {
-            dispatch(changeTheme(theme_light));
-          });
+          AsyncStorage.setItem('@theme', theme_light)
+            .then(() => {
+              dispatch(changeTheme(theme_light));
+            })
+            .catch(() => {});
         } else {
-          AsyncStorage.setItem('@theme', theme_dark).then(() => {
-            dispatch(changeTheme(theme_dark));
-          });
+          AsyncStorage.setItem('@theme', theme_dark)
+            .then(() => {
+              dispatch(changeTheme(theme_dark));
+            })
+            .catch(() => {});
         }
       }, 50);
     }
@@ -132,9 +159,11 @@ function Main({navigation, route}) {
     try {
       AsyncStorage.getItem('@theme').then((v) => {
         if (v === null) {
-          AsyncStorage.setItem('@theme', 'light').then(() => {
-            dispatch(changeTheme('light'));
-          });
+          AsyncStorage.setItem('@theme', 'light')
+            .then(() => {
+              dispatch(changeTheme('light'));
+            })
+            .catch(() => {});
         } else {
           dispatch(changeTheme(v));
         }
@@ -142,6 +171,7 @@ function Main({navigation, route}) {
     } catch (e) {
       SplashScreen.hide();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function closeAllBanners() {
@@ -265,7 +295,7 @@ function Main({navigation, route}) {
         ref={sb}
         onChangeText={(a) => setQuery(a)}
         value={query}
-        placeholder="Rechercher un article"
+        placeholder={I18n.t('searchBar')}
         onIconPress={() => navigation.push('Search', {search: query})}
         onSubmitEditing={() => navigation.push('Search', {search: query})}
         inputStyle={{fontSize: 12, padding: 5}}
@@ -303,7 +333,7 @@ function Main({navigation, route}) {
         visible={snackbar}
         duration={2000}
         onDismiss={() => setSB(false)}>
-        Changement de thème
+        {I18n.t('themeChanged')}
       </Snackbar>
 
       <Snackbar
@@ -312,7 +342,7 @@ function Main({navigation, route}) {
         visible={snackbarcache}
         duration={2000}
         onDismiss={() => setSBCache(false)}>
-        Enregistrement dans le cache effectué
+        {I18n.t('savedInCache')}
       </Snackbar>
 
       <Snackbar
@@ -321,7 +351,7 @@ function Main({navigation, route}) {
         visible={snackbarcachearticle}
         duration={2000}
         onDismiss={() => setSBCacheArticle(false)}>
-        Erreur, article indisponible.
+        {I18n.t('unavailableArticle')}
       </Snackbar>
 
       <SafeAreaView style={stateTheme.styles.container}>
@@ -344,16 +374,28 @@ function Main({navigation, route}) {
               icon="theme-light-dark"
               onPress={() => {
                 setTimeout(() => setSB(true), 50);
+                setMenu(false);
               }}
-              title="Changer de thème"
+              title={I18n.t('changeTheme')}
+            />
+            <Divider />
+            <MenuItemDC
+              icon="cog"
+              onPress={() => {
+                navigation.push('Settings');
+                setMenu(false);
+              }}
+              title={I18n.t('settings')}
             />
             <Divider />
             <MenuItemDC
               icon="information-outline"
-              onPress={() => navigation.push('Credits')}
-              title="Crédits"
+              onPress={() => {
+                navigation.push('Credits');
+                setMenu(false);
+              }}
+              title={I18n.t('about')}
             />
-            <Divider />
           </Menu>
         </Appbar.Header>
 
@@ -366,11 +408,11 @@ function Main({navigation, route}) {
           }}
           actions={[
             {
-              label: 'Fermer',
+              label: I18n.t('close'),
               onPress: () => setBannerUpdate(false),
             },
             {
-              label: 'Télécharger',
+              label: I18n.t('download'),
               onPress: () =>
                 Linking.openURL('https://becauseofprog.fr/page/app')
                   .then(() => {})
@@ -379,13 +421,13 @@ function Main({navigation, route}) {
           ]}
           icon="update">
           <Text>
-            Une mise-à-jour est disponible !{' '}
+            {I18n.t('newUpdate')}{' '}
             <Text style={{fontSize: 11}}>
               {getVersion()} -> {newVersion}
             </Text>
             {'\n'}
           </Text>
-          <Text style={{fontSize: 11}}>Architectures de l'appareil : </Text>
+          <Text style={{fontSize: 11}}>{I18n.t('archAndroid')}</Text>
           {archs.map((v, i) => {
             return i < archs.length - 1 ? (
               <Text style={{fontSize: 9}} key={i}>
@@ -428,6 +470,7 @@ function App() {
           <Stack.Screen name="WebView" component={MyWebComponent} />
           <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="Credits" component={Credits} />
+          <Stack.Screen name="Settings" component={Settings} />
         </Stack.Navigator>
       </NavigationContainer>
     </StateProvider>

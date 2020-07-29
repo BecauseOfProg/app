@@ -14,6 +14,7 @@ import withPreventDoubleClick from '../utils/withPreventDoubleClick';
 
 import {useSelector} from 'react-redux';
 import CardView from '../views/CardView';
+import I18n from '../utils/i18n';
 
 export default React.memo(function Search({route, navigation}) {
   const [loading, setLoading] = useState(true);
@@ -78,16 +79,16 @@ export default React.memo(function Search({route, navigation}) {
           visible={banner}
           actions={[
             {
-              label: 'Fermer',
+              label: I18n.t('close'),
               onPress: () => setBanner(false),
             },
             {
-              label: 'Réessayer',
+              label: I18n.t('retry'),
               onPress: () => getPosts(),
             },
           ]}
           icon="wifi-off">
-          Pas de connexion Internet ou veuillez réessayer plus tard !
+          {I18n.t('errorInternet')}
         </Banner>
 
         {loading && (

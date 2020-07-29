@@ -2,30 +2,26 @@ import FastImage from 'react-native-fast-image';
 import {Card, Chip, Paragraph, Title} from 'react-native-paper';
 import {Image, Text, View} from 'react-native';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import moment from 'moment';
-import {Cache} from 'react-native-cache';
-import AsyncStorage from '@react-native-community/async-storage';
-
-const cache = new Cache({
-  namespace: 'articles',
-  policy: {
-    maxEntries: 50000,
-  },
-  backend: AsyncStorage,
-});
+import {useSelector} from 'react-redux';
 
 export default React.memo(function CardView(props) {
   const CardDC = withPreventDoubleClick(Card);
   const [read, setRead] = useState(false);
 
+  const readArticles = useSelector((state) => state.readArticles);
+
   useEffect(() => {
-    cache.get('@offline_post_' + props.item.url).then((value) => {
-      if (value !== undefined && value !== null) {
+    if (props.item !== undefined) {
+      if (readArticles.includes(props.item.url)) {
         setRead(true);
+      } else {
+        setRead(false);
       }
-    });
-  });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [readArticles]);
 
   return (
     <View
@@ -39,11 +35,6 @@ export default React.memo(function CardView(props) {
           props.navigation.push('WebView', {
             url: props.item.url,
           });
-          setTimeout(() => {
-            if (!read) {
-              setRead(true);
-            }
-          }, 350);
         }}
         style={{marginTop: props.top}}>
         <FastImage

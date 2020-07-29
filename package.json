@@ -1,6 +1,6 @@
 {
   "name": "becauseofprog",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -24,6 +24,7 @@
     "gatsby-source-contentful": "^2.3.31",
     "gatsby-transformer-sharp": "^2.5.11",
     "gatsby-transformer-sqip": "^2.3.21",
+    "i18n-js": "^3.7.1",
     "install": "^0.13.0",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
@@ -40,6 +41,7 @@
     "react-native-gesture-handler": "^1.7.0",
     "react-native-get-random-values": "^1.4.0",
     "react-native-image-viewing": "^0.2.0",
+    "react-native-localize": "^1.4.1",
     "react-native-markdown-display": "^6.1.6",
     "react-native-navigation-bar-color": "^2.0.1",
     "react-native-paper": "^4.0.1",

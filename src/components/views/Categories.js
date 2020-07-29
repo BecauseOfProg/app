@@ -18,6 +18,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {closeBanners, openBanners} from '../../redux/reducer';
+import I18n from '../utils/i18n';
 
 const cache = new Cache({
   namespace: 'everything',
@@ -57,6 +58,7 @@ export default React.memo(function Categories(props) {
 
   useEffect(() => {
     getPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   function getPosts() {
@@ -130,11 +132,11 @@ export default React.memo(function Categories(props) {
         style={{marginBottom: 0}}
         actions={[
           {
-            label: 'Fermer',
+            label: I18n.t('close'),
             onPress: () => dispatch(closeBanners()),
           },
           {
-            label: 'Réessayer',
+            label: I18n.t('retry'),
             onPress: () => {
               setRefreshing(true);
               getPosts();
@@ -142,7 +144,7 @@ export default React.memo(function Categories(props) {
           },
         ]}
         icon="wifi-off">
-        Pas de connexion Internet ou veuillez réessayer plus tard !
+        {I18n.t('errorInternet')}
       </Banner>
       {loading ? (
         <ActivityIndicator

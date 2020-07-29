@@ -32,7 +32,9 @@ import moment from 'moment';
 import Clipboard from '@react-native-community/clipboard';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {changeTheme} from '../../redux/reducer';
+import {changeTheme, readArticles} from '../../redux/reducer';
+
+import I18n from '../utils/i18n';
 
 const WEBSITE_ROOT = 'https://becauseofprog.fr/article/';
 
@@ -116,13 +118,20 @@ export default React.memo(function MyWebComponent({route, navigation}) {
   }
 
   function saveCache(responseData, showSnackbar) {
-    cache
-      .set('@offline_post_' + route.params.url, JSON.stringify(responseData))
-      .then((r) => {
-        if (showSnackbar) {
-          setSBCache(true);
-        }
-      });
+    AsyncStorage.getItem('@cacheArticlesContent').then((b) => {
+      if (b == null || JSON.parse(b)) {
+        cache
+          .set(
+            '@offline_post_' + route.params.url,
+            JSON.stringify(responseData),
+          )
+          .then((r) => {
+            if (showSnackbar) {
+              setSBCache(true);
+            }
+          });
+      }
+    });
   }
 
   function getContent() {
@@ -137,6 +146,14 @@ export default React.memo(function MyWebComponent({route, navigation}) {
       .then((responseData) => {
         setEverything(responseData);
 
+        AsyncStorage.getItem('@cacheRead')
+          .then((b) => {
+            if (b == null || JSON.parse(b)) {
+              dispatch(readArticles(route.params.url));
+            }
+          })
+          .catch(() => {});
+
         cache.get('@offline_post_' + route.params.url).then((value) => {
           if (value !== undefined && value !== null) {
             if (value !== JSON.stringify(responseData)) {
@@ -149,7 +166,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
           }
         });
       })
-      .catch(() => {
+      .catch((err) => {
         cache.get('@offline_post_' + route.params.url).then((value) => {
           if (value !== undefined && value !== null) {
             setEverything(JSON.parse(value));
@@ -221,7 +238,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
         visible={snackbarhc}
         duration={2000}
         onDismiss={() => setSBHc(false)}>
-        Article hors connexion
+        {I18n.t('offlineArticle')}
       </Snackbar>
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
@@ -229,7 +246,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
         visible={snackbar}
         duration={2000}
         onDismiss={() => setSB(false)}>
-        Changement de thème
+        {I18n.t('themeChanged')}
       </Snackbar>
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
@@ -237,7 +254,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
         visible={snackbarcache}
         duration={500}
         onDismiss={() => setSBCache(false)}>
-        Enregistrement dans le cache effectué
+        {I18n.t('savedInCache')}
       </Snackbar>
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
@@ -245,7 +262,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
         visible={snackbarclipboard}
         duration={500}
         onDismiss={() => setSBClipboard(false)}>
-        URL copiée dans le presse-papier
+        {I18n.t('copiedUrl')}
       </Snackbar>
 
       <ImageViewing
@@ -328,7 +345,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
                     textShadowOffset: {width: -1, height: 1},
                     textShadowRadius: 10,
                   }}>
-                  Publié par {auteur}, le {date}
+                  {I18n.t('publishedOn')} {auteur}, {I18n.t('on')} {date}
                 </Text>
               </View>
             </ImageBackground>
@@ -431,13 +448,14 @@ export default React.memo(function MyWebComponent({route, navigation}) {
       </SafeAreaView>
       <Portal>
         <FAB.Group
+          fabStyle={{backgroundColor: '#f1c40f'}}
           open={fab}
           icon={fabIcon}
           actions={[
             {
               color: stateTheme.t === 'dark' ? 'white' : 'black',
               icon: 'content-copy',
-              label: "Copier l'url",
+              label: I18n.t('copyUrl'),
               onPress: () => {
                 setTimeout(() => setSBClipboard(true), 100);
                 Clipboard.setString(WEBSITE_ROOT + route.params.url);
@@ -446,7 +464,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
             {
               color: 'forestgreen',
               icon: 'share',
-              label: 'Partager',
+              label: I18n.t('share'),
               onPress: () => {
                 setFabIcon('share');
                 shareURL(WEBSITE_ROOT + route.params.url).then((r) => {});

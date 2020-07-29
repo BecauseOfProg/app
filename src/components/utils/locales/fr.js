@@ -1,0 +1,51 @@
+export default {
+  about: 'À propos',
+  changeTheme: 'Changer de thème',
+  searchBar: 'Rechercher un article',
+  themeChanged: 'Changement de thème',
+  savedInCache: 'Enregistrement dans le cache effectué',
+  unavailableArticle: 'Erreur, article indisponible.',
+  newUpdate: 'Une mise-à-jour est disponible !',
+  archAndroid: "Architectures de l'appareil : ",
+  close: 'Fermer',
+  download: 'Télécharger',
+  copyUrl: "Copier l'url",
+  share: 'Partager',
+  offlineArticle: 'Article hors connexion',
+  copiedUrl: 'URL copiée dans le presse-papier',
+  publishedOn: 'Publié par',
+  on: 'le',
+  createdBy: 'Réalisé par',
+  acknowledgements: 'Remerciements : @exybore, @gildas_gh',
+  settings: 'Paramètres',
+  titleLang: 'Langues',
+  appLang: "Langue de l'application",
+  saveTitle: 'Cache et sauvegarde',
+  cachingArticlesTitle: 'Mise en cache du contenu',
+  cachingArticlesSubtitle:
+    'Sauvegarder le contenu des articles vus. Ne supprime pas les anciens articles en cache.',
+  readArticlesTitle: 'Sauvegarder les articles lus',
+  readArticlesSubtitle:
+    'Visibles avec un checkmark sur le titre. Ne supprime pas les anciens articles.',
+  retry: 'Réessayer',
+  errorInternet: 'Pas de connexion Internet / veuillez réessayer plus tard !',
+  removeReadArticles: 'Supprimer les articles lus',
+  removeReadArticlesC:
+    'Souhaitez-vous supprimer les articles lus ? Cette action est irréversible.',
+  cancel: 'Annuler',
+  ok: 'OK',
+  removeCacheContent: "Supprimer le cache des contenus d'articles",
+  removeCacheContentC:
+    "Souhaitez-vous supprimer le cache des contenus d'articles ? Cette action est irréversible.",
+  removeGlobalCache: 'Supprimer le cache global',
+  removeGlobalCacheC:
+    'Souhaitez-vous supprimer tout le cache (sauf images) ? Cette action est irréversible.',
+  removeReadArticlesTitle: 'Supprimer les articles lus',
+  removeReadArticlesSubtitle: 'Supprime la liste des articles déjà lus',
+  removeArticlesContentTitle: "Supprimer les contenus d'articles",
+  removeArticlesContentSubtitle:
+    'Supprimer les articles dont le contenu est en cache',
+  removeGlobalCacheTitle: 'Supprimer le cache (global)',
+  removeGlobalCacheSubtitle:
+    'Supprime la liste des articles, et le contenu des articles en cache',
+};
