@@ -35,11 +35,6 @@ export default React.memo(function CardView(props) {
           props.navigation.push('WebView', {
             url: props.item.url,
           });
-          /*setTimeout(() => {
-                      if (!read) {
-                        setRead(true);
-                      }
-                    }, 350);*/
         }}
         style={{marginTop: props.top}}>
         <FastImage
