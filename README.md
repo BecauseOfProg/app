@@ -13,8 +13,9 @@
 - [📥 Get the app](#-get-the-app)
 - [🌈 How it works](#-how-it-works)
 - [💻 Development](#-development)
-  - [Prerequisites](#-prerequisites)
+  - [Prerequisites](#prerequisites)
   - [Setup](#setup)
+- [🇫🇷 Translate the app](#-translate-the-app)
 - [📜 Credits](#-credits)
 - [🔐 License](#-license)
 
@@ -22,7 +23,7 @@
 
 The app is being automatically compiled with Github Actions, thanks to [this project](https://github.com/realabbas/Github-Actions-React-Native).
 
-Then, the files are being send in SSH to the BecauseOfProg VPS, thanks to [this action](https://github.com/appleboy/scp-action), and available here : TODO.
+Then, the files are being send in SSH to the BecauseOfProg VPS, thanks to [this action](https://github.com/appleboy/scp-action), and available here : [becauseofprog.fr/page/app](https://becauseofprog.fr/page/app).
 
 ## 🌈 How it works
 
@@ -80,6 +81,11 @@ yarn run start
     - Build (top menu)
     - Generate (Signed) Bundle/APK 
     - Choose APK
+
+## 🇫🇷 Translate the app
+
+You can add your own language, by editing `./src/components/utils/locales/` (\<lang\>.js) and `./src/components/utils/i18n.js`.  
+Then, make a pull request <3
 
 ## 📜 Credits
 
