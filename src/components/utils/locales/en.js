@@ -1,0 +1,51 @@
+export default {
+  about: 'About',
+  changeTheme: 'Change theme',
+  searchBar: 'Search an article',
+  themeChanged: 'Theme change made',
+  savedInCache: 'Caching performed',
+  unavailableArticle: 'Error, unavailable article.',
+  newUpdate: 'New available update !',
+  archAndroid: 'Device architectures : ',
+  close: 'Close',
+  download: 'Download',
+  copyUrl: 'Copy the URL',
+  share: 'Partager',
+  offlineArticle: 'Offline article',
+  copiedUrl: 'URL copied to clipboard',
+  publishedOn: 'Published by',
+  on: 'on',
+  createdBy: 'Created by',
+  acknowledgements: 'Acknowledgements : @exybore, @gildas_gh',
+  settings: 'Settings',
+  titleLang: 'Langs',
+  appLang: 'Application language',
+  saveTitle: 'Save and cache settings',
+  cachingArticlesTitle: 'Caching articles',
+  cachingArticlesSubtitle:
+    'Save the contents of the articles viewed. Does not delete old cached articles.',
+  readArticlesTitle: 'Display articles read',
+  readArticlesSubtitle:
+    'Visible with a checkmark on the title. Does not delete old articles.',
+  retry: 'Try again',
+  errorInternet: 'No Internet / please try again later !',
+  removeReadArticles: 'Delete read articles',
+  removeReadArticlesC:
+    'Would you like to delete the articles you have read? This action is irreversible.',
+  cancel: 'Cancel',
+  ok: 'OK',
+  removeCacheContent: 'Delete the cache of article contents',
+  removeCacheContentC:
+    'Would you like to remove the cache of article content? This action is irreversible.',
+  removeGlobalCache: 'Delete the global cache',
+  removeGlobalCacheC:
+    'Would you like to delete the entire cache (except images) ? This action is irreversible.',
+  removeReadArticlesTitle: 'Delete read articles',
+  removeReadArticlesSubtitle: 'Deletes the list of articles already read',
+  removeArticlesContentTitle: 'Delete article contents',
+  removeArticlesContentSubtitle:
+    'Delete cached articles. This action is irreversible.',
+  removeGlobalCacheTitle: 'Delete cache (global)',
+  removeGlobalCacheSubtitle:
+    'Deletes the list of articles, and the content of cached articles',
+};
