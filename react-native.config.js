@@ -2,5 +2,5 @@ module.exports = {
   project: {
     android: {},
   },
-  assets: ['./assets/fonts/', './assets/images/'],
+  assets: ['./assets/fonts/', './assets/images/'], // Assets directories
 };

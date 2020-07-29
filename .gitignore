@@ -1,3 +1,6 @@
+# Git ignore
+
+# Useless thing
 *.hprof
 
 # ANDROID STUDIO
