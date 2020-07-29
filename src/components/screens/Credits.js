@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   Animated,
   Image,
@@ -12,11 +12,21 @@ import {SvgUri} from 'react-native-svg';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
 import {useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
-import {getVersion} from 'react-native-device-info';
+import {getVersion, supportedAbis} from 'react-native-device-info';
+import I18n from '../utils/i18n';
 
 export default React.memo(function Credits({route, navigation}) {
   const stateTheme = useSelector((state) => state.theme);
   const [showEA, setEA] = useState(false);
+  const [archs, setArchs] = useState([]);
+
+  useEffect(() => {
+    supportedAbis()
+      .then((abis) => {
+        setArchs(abis);
+      })
+      .catch(() => {});
+  }, []);
 
   const AppbarBackActionDC = withPreventDoubleClick(Appbar.BackAction);
 
@@ -106,14 +116,27 @@ export default React.memo(function Credits({route, navigation}) {
                   fontSize: 20,
                   fontFamily: 'Roboto-Regular',
                 }}>
-                Réalisé par @kernoeb
+                {I18n.t('createdBy')}{' '}
+                <Text
+                  style={{
+                    color: '#008abe',
+                    textDecorationLine: 'underline',
+                    fontWeight: 'bold',
+                  }}
+                  onPress={() =>
+                    Linking.openURL(
+                      'https://twitter.com/kop_of_tea',
+                    ).catch(() => {})
+                  }>
+                  @kernoeb
+                </Text>
               </Text>
               <Text
                 style={{
                   fontSize: 15,
                   fontFamily: 'Roboto-Regular',
                 }}>
-                Remerciements : @exybore, @gildas_gh
+                {I18n.t('acknowledgements')}
               </Text>
               <Text
                 onPress={() =>
@@ -125,9 +148,21 @@ export default React.memo(function Credits({route, navigation}) {
                   fontSize: 15,
                   fontFamily: 'monospace',
                   textDecorationLine: 'underline',
+                  marginBottom: 10,
                 }}>
                 https://becauseofprog.fr
               </Text>
+              {archs.map((v, i) => {
+                return i < archs.length - 1 ? (
+                  <Text style={{fontSize: 9}} key={i}>
+                    {v},{' '}
+                  </Text>
+                ) : (
+                  <Text style={{fontSize: 9}} key={i}>
+                    {v}
+                  </Text>
+                );
+              })}
             </View>
           ) : (
             <Image
