@@ -77,18 +77,22 @@ function Main({navigation, route}) {
 
   // UPDATES
   useEffect(() => {
-    AsyncStorage.getItem('@readArticles').then((b) => {
-      if (b == null || b) {
-        dispatch(readArticles(JSON.parse(b)));
-      }
-    });
+    AsyncStorage.getItem('@readArticles')
+      .then((b) => {
+        if (b == null || b) {
+          dispatch(readArticles(JSON.parse(b)));
+        }
+      })
+      .catch(() => {});
 
-    AsyncStorage.getItem('@lang').then((b) => {
-      if (b !== null && b !== undefined) {
-        I18n.locale = b;
-        setRefresh((r) => !r);
-      }
-    });
+    AsyncStorage.getItem('@lang')
+      .then((b) => {
+        if (b !== null && b !== undefined) {
+          I18n.locale = b;
+          setRefresh((r) => !r);
+        }
+      })
+      .catch(() => {});
 
     supportedAbis()
       .then((abis) => {
@@ -134,13 +138,17 @@ function Main({navigation, route}) {
         let theme_light = 'light';
         let theme_dark = 'dark';
         if (stateTheme.t === theme_dark) {
-          AsyncStorage.setItem('@theme', theme_light).then(() => {
-            dispatch(changeTheme(theme_light));
-          });
+          AsyncStorage.setItem('@theme', theme_light)
+            .then(() => {
+              dispatch(changeTheme(theme_light));
+            })
+            .catch(() => {});
         } else {
-          AsyncStorage.setItem('@theme', theme_dark).then(() => {
-            dispatch(changeTheme(theme_dark));
-          });
+          AsyncStorage.setItem('@theme', theme_dark)
+            .then(() => {
+              dispatch(changeTheme(theme_dark));
+            })
+            .catch(() => {});
         }
       }, 50);
     }
@@ -151,9 +159,11 @@ function Main({navigation, route}) {
     try {
       AsyncStorage.getItem('@theme').then((v) => {
         if (v === null) {
-          AsyncStorage.setItem('@theme', 'light').then(() => {
-            dispatch(changeTheme('light'));
-          });
+          AsyncStorage.setItem('@theme', 'light')
+            .then(() => {
+              dispatch(changeTheme('light'));
+            })
+            .catch(() => {});
         } else {
           dispatch(changeTheme(v));
         }
