@@ -23,15 +23,21 @@ export default React.memo(function Search({route, navigation}) {
   const [banner, setBanner] = useState(false);
   const [update, setUpdate] = useState(false);
   const [title, setTitle] = useState('search');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const stateTheme = useSelector((state) => state.theme);
+
+  function loadMore() {
+    setCurrentPage(currentPage + 1);
+  }
 
   useEffect(() => {
     getPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [currentPage]);
 
   function getPosts() {
+    let page = currentPage;
     let tmp = 'search';
     if (route.params.mode !== undefined) {
       tmp = route.params.mode;
@@ -42,20 +48,32 @@ export default React.memo(function Search({route, navigation}) {
       }
     }
     if (route.params.search.trim() !== undefined) {
-      fetch(`${config.api}blog-posts?${tmp}=${route.params.search.trim()}`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+      fetch(
+        `${
+          config.api
+        }blog-posts?page=${page}&${tmp}=${route.params.search.trim()}`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
         .then((response) => response.json())
         .then((responseData) => {
-          let j = responseData.data;
-          setValues(j);
-          setLoading(false);
-          setBanner(false);
-          setUpdate(!update);
+          if (page <= responseData.pages) {
+            let j;
+            if (page === 1) {
+              j = responseData.data;
+            } else {
+              j = [...val, ...responseData.data];
+            }
+            setValues(j);
+            setLoading(false);
+            setBanner(false);
+            setUpdate(!update);
+          }
         })
         .catch(() => setBanner(true));
     }
@@ -114,6 +132,12 @@ export default React.memo(function Search({route, navigation}) {
           }}
           extraData={update}
           data={val}
+          onEndReached={({distanceFromEnd}) => {
+            if (distanceFromEnd < 0) {
+              return;
+            }
+            loadMore();
+          }}
           onEndReachedThreshold={0.5}
           initialNumToRender={10}
           keyExtractor={(item) => item.timestamp.toString()}
