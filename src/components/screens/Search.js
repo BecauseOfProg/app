@@ -15,6 +15,7 @@ import withPreventDoubleClick from '../utils/withPreventDoubleClick';
 import {useSelector} from 'react-redux';
 import CardView from '../views/CardView';
 import I18n from '../utils/i18n';
+import config from '../../../configuration.json';
 
 export default React.memo(function Search({route, navigation}) {
   const [loading, setLoading] = useState(true);
@@ -31,16 +32,13 @@ export default React.memo(function Search({route, navigation}) {
 
   function getPosts() {
     if (route.params.search.trim() !== undefined) {
-      fetch(
-        `https://api.becauseofprog.fr/v1/blog-posts?search=${route.params.search.trim()}`,
-        {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
+      fetch(`${config.api}blog-posts?search=${route.params.search.trim()}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
-      )
+      })
         .then((response) => response.json())
         .then((responseData) => {
           let j = responseData.data;

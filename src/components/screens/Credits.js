@@ -14,6 +14,7 @@ import {useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import {getVersion, supportedAbis} from 'react-native-device-info';
 import I18n from '../utils/i18n';
+import config from '../../../configuration.json';
 
 export default React.memo(function Credits({route, navigation}) {
   const stateTheme = useSelector((state) => state.theme);
@@ -94,7 +95,7 @@ export default React.memo(function Credits({route, navigation}) {
               <SvgUri
                 width={100}
                 height={100}
-                uri="https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/assets/logos/bop.svg"
+                uri={config.cdn + 'sites/becauseofprog.fr/assets/logos/bop.svg'}
               />
             </Animatable.View>
           </Animated.View>
@@ -139,9 +140,7 @@ export default React.memo(function Credits({route, navigation}) {
                 {I18n.t('acknowledgements')}
               </Text>
               <Text
-                onPress={() =>
-                  Linking.openURL('https://becauseofprog.fr').catch(() => {})
-                }
+                onPress={() => Linking.openURL(config.url).catch(() => {})}
                 style={{
                   color: 'rgba(255,81,76,1)',
                   marginTop: 10,
@@ -150,7 +149,7 @@ export default React.memo(function Credits({route, navigation}) {
                   textDecorationLine: 'underline',
                   marginBottom: 10,
                 }}>
-                https://becauseofprog.fr
+                {config.url.slice(0, -1)}
               </Text>
               {archs.map((v, i) => {
                 return i < archs.length - 1 ? (

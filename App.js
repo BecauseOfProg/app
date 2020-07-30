@@ -52,6 +52,8 @@ import {changeTheme, readArticles} from './src/redux/reducer';
 
 import I18n from './src/components/utils/i18n';
 
+import config from './configuration.json';
+
 function Main({navigation, route}) {
   const [searchBar, setSearchBar] = useState(false);
   const [query, setQuery] = useState('');
@@ -100,9 +102,7 @@ function Main({navigation, route}) {
       })
       .catch(() => {});
 
-    fetch(
-      'https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/output-metadata.json',
-    )
+    fetch(config.cdn + 'sites/becauseofprog.fr/app/output-metadata.json')
       .then((response) => response.json())
       .then((responseData) => {
         try {
@@ -255,7 +255,7 @@ function Main({navigation, route}) {
         <SvgUri
           width={45}
           height={45}
-          uri="https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/assets/logos/bop.svg"
+          uri={config.cdn + 'sites/becauseofprog.fr/assets/logos/bop.svg'}
         />
       </TouchableOpacity>
       <Appbar.Content
@@ -415,7 +415,7 @@ function Main({navigation, route}) {
             {
               label: I18n.t('download'),
               onPress: () =>
-                Linking.openURL('https://becauseofprog.fr/page/app')
+                Linking.openURL(config.url + 'page/app')
                   .then(() => {})
                   .catch(() => {}),
             },

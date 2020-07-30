@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {closeBanners, openBanners} from '../../redux/reducer';
 import I18n from '../utils/i18n';
+import config from '../../../configuration.json';
 
 const cache = new Cache({
   namespace: 'everything',
@@ -65,9 +66,9 @@ export default React.memo(function Categories(props) {
     let page = currentPage;
     let url;
     if (props.categoryTitle === 'global') {
-      url = `https://api.becauseofprog.fr/v1/blog-posts?page=${page}`;
+      url = `${config.api}blog-posts?page=${page}`;
     } else {
-      url = `https://api.becauseofprog.fr/v1/blog-posts?page=${page}&category=${props.categoryTitle}`;
+      url = `${config.api}blog-posts?page=${page}&category=${props.categoryTitle}`;
     }
 
     setTimeout(() => {
@@ -200,6 +201,7 @@ export default React.memo(function Categories(props) {
                 top={top}
                 navigation={props.navigation}
                 jumpTo={props.jumpTo}
+                category={props.categoryTitle}
               />
             );
           }}
