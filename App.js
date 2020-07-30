@@ -52,6 +52,8 @@ import {changeTheme, readArticles} from './src/redux/reducer';
 
 import I18n from './src/components/utils/i18n';
 
+import config from './configuration.json';
+
 function Main({navigation, route}) {
   const [searchBar, setSearchBar] = useState(false);
   const [query, setQuery] = useState('');
@@ -100,9 +102,7 @@ function Main({navigation, route}) {
       })
       .catch(() => {});
 
-    fetch(
-      'https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/app/output-metadata.json',
-    )
+    fetch(config.cdn + 'sites/becauseofprog.fr/app/output-metadata.json')
       .then((response) => response.json())
       .then((responseData) => {
         try {
@@ -196,7 +196,7 @@ function Main({navigation, route}) {
   ]);
 
   // ROUTES - Categories
-  const renderScene = ({route}) => {
+  const renderScene = ({route, jumpTo}) => {
     if (Math.abs(index - routes.indexOf(route)) > 2) {
       return <View />;
     }
@@ -207,6 +207,7 @@ function Main({navigation, route}) {
         banner={banner}
         closeAllBanners={closeBanners}
         stateTheme={stateTheme}
+        jumpTo={jumpTo}
       />
     );
   };
@@ -254,7 +255,7 @@ function Main({navigation, route}) {
         <SvgUri
           width={45}
           height={45}
-          uri="https://cdn.becauseofprog.fr/v2/sites/becauseofprog.fr/assets/logos/bop.svg"
+          uri={config.cdn + 'sites/becauseofprog.fr/assets/logos/bop.svg'}
         />
       </TouchableOpacity>
       <Appbar.Content
@@ -296,8 +297,12 @@ function Main({navigation, route}) {
         onChangeText={(a) => setQuery(a)}
         value={query}
         placeholder={I18n.t('searchBar')}
-        onIconPress={() => navigation.push('Search', {search: query})}
-        onSubmitEditing={() => navigation.push('Search', {search: query})}
+        onIconPress={() =>
+          navigation.push('Search', {search: query, mode: 'search'})
+        }
+        onSubmitEditing={() =>
+          navigation.push('Search', {search: query, mode: 'search'})
+        }
         inputStyle={{fontSize: 12, padding: 5}}
         style={{flex: 1, height: 30, marginLeft: 10}}
       />
@@ -414,7 +419,7 @@ function Main({navigation, route}) {
             {
               label: I18n.t('download'),
               onPress: () =>
-                Linking.openURL('https://becauseofprog.fr/page/app')
+                Linking.openURL(config.url + 'page/app')
                   .then(() => {})
                   .catch(() => {}),
             },

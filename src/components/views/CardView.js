@@ -68,26 +68,42 @@ export default React.memo(function CardView(props) {
             flexDirection: 'row',
             marginTop: 20,
             marginBottom: 10,
-            alignItems: 'center',
-            justifyContent: 'space-around',
+            marginLeft: props.category !== 'global' ? 10 : null,
+            alignItems: props.category === 'global' ? 'center' : null,
+            justifyContent: props.category === 'global' ? 'space-around' : null,
           }}>
           <Chip
+            onPress={() => {
+              props.navigation.push('Search', {
+                search: props.item.author.username,
+                mode: 'author',
+                displayName: props.item.author.displayname,
+              });
+            }}
             avatar={<Image source={{uri: props.item.author.picture}} />}
             mode="flat">
             <Text style={{fontFamily: 'Roboto-Light'}}>
               {props.item.author.displayname}
             </Text>
           </Chip>
-          <Chip mode="flat">
+          <Chip
+            mode="flat"
+            style={{marginLeft: props.category !== 'global' ? 8 : null}}>
             <Text style={{fontFamily: 'Roboto-Light'}}>
               {moment.unix(props.item.timestamp).format('DD/MM/YYYY')}
             </Text>
           </Chip>
-          <Chip mode="flat">
-            <Text style={{fontFamily: 'Roboto-Light'}}>
-              {props.item.category}
-            </Text>
-          </Chip>
+          {props.category === 'global' && (
+            <Chip
+              mode="flat"
+              onPress={() => {
+                props.jumpTo(props.item.category);
+              }}>
+              <Text style={{fontFamily: 'Roboto-Light'}}>
+                {props.item.category}
+              </Text>
+            </Chip>
+          )}
         </View>
       </CardDC>
     </View>

@@ -35,8 +35,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {changeTheme, readArticles} from '../../redux/reducer';
 
 import I18n from '../utils/i18n';
+import config from '../../../configuration.json';
 
-const WEBSITE_ROOT = 'https://becauseofprog.fr/article/';
+const WEBSITE_ROOT = config.url + 'article/';
 
 async function shareURL(url) {
   try {
@@ -58,7 +59,6 @@ export default React.memo(function MyWebComponent({route, navigation}) {
   const [fab, setFab] = useState(false);
   const [fabIcon, setFabIcon] = useState('dots-horizontal');
   const [page, setPage] = useState('');
-  const [type, setType] = useState('');
   const [title, setTitle] = useState('');
   const [url, setURL] = useState('');
   const [auteur, setAuteur] = useState('');
@@ -109,7 +109,6 @@ export default React.memo(function MyWebComponent({route, navigation}) {
   function setEverything(e) {
     setPage(e.data.content);
     setURL(e.data.url);
-    setType(e.data.article_language);
     setTitle(e.data.title);
     setPicture(e.data.banner);
     setDate(moment.unix(e.data.timestamp).format('DD/MM/YYYY'));
@@ -135,7 +134,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
   }
 
   function getContent() {
-    fetch('https://api.becauseofprog.fr/v1/blog-posts/' + route.params.url, {
+    fetch(config.api + 'blog-posts/' + route.params.url, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -351,91 +350,51 @@ export default React.memo(function MyWebComponent({route, navigation}) {
             </ImageBackground>
 
             <Card style={{margin: 10}}>
-              {type === 'markdown' ? (
-                <View style={{padding: 15}}>
-                  <Markdown
-                    rules={imageRule}
-                    mergeStyle={true}
-                    style={{
-                      // TODO Fix Colors Dark theme
-                      body: {
-                        fontFamily: 'Roboto-Light',
-                        fontSize: 16,
-                        textAlign: 'justify',
-                      },
-                      text: {
-                        color: stateTheme.others.text,
-                      },
-                      code_block: {
-                        color: stateTheme.others.text,
-                        backgroundColor: stateTheme.others.codeblockcolor,
-                      },
-                      fence: {
-                        color: stateTheme.others.text,
-                        backgroundColor: stateTheme.others.codeblockcolor,
-                      },
-                      code_inline: {
-                        color: stateTheme.others.text,
-                        backgroundColor: stateTheme.others.codeblockcolor,
-                        fontSize: 20,
-                        fontStyle: 'normal',
-                      },
-                      blockquote: {
-                        color: stateTheme.others.text,
-                        backgroundColor: stateTheme.others.codeblockcolor,
-                        fontStyle: 'italic',
-                      },
-                      heading3: {
-                        fontWeight: 'bold',
-                      },
-                      heading2: {
-                        fontWeight: 'bold',
-                      },
-                      list_item: {
-                        color: stateTheme.others.text,
-                      },
-                    }}>
-                    {page}
-                  </Markdown>
-                </View>
-              ) : (
-                <AutoHeightWebView
-                  customScript={"document.body.style.userSelect = 'none'"}
+              <View style={{padding: 15}}>
+                <Markdown
+                  rules={imageRule}
+                  mergeStyle={true}
                   style={{
-                    width: Dimensions.get('window').width - 60,
-                    marginTop: 20,
-                    marginBottom: 20,
-                    marginLeft: 20,
-                  }}
-                  source={{
-                    html:
-                      page +
-                      "<style>* { font-family: 'Roboto Light',sans-serif }</style><style type=\"text/css\"> @font-face {font-family: 'Roboto Light'; src:url('file:///android_asset/fonts/Roboto-Light.ttf')}</style>",
-                  }}
-                  onShouldStartLoadWithRequest={(event) => {
-                    if (
-                      event.url !== WEBSITE_ROOT + url &&
-                      event.url !== 'about:blank'
-                    ) {
-                      Linking.openURL(event.url).catch(() => {});
-                      return false;
-                    }
-                    return true;
-                  }}
-                  customStyle={`
-                  * {
-                    text-align: justify;
-                    color: ${stateTheme.others.codeblockcolor}
-                  }
-                  p {
-                    font-size: 16px;
-                  }
-                  a {
-                    color: ${stateTheme.others.links}
-                  }
-                `}
-                />
-              )}
+                    body: {
+                      fontFamily: 'Roboto-Light',
+                      fontSize: 16,
+                      textAlign: 'justify',
+                    },
+                    text: {
+                      color: stateTheme.others.text,
+                    },
+                    code_block: {
+                      color: stateTheme.others.text,
+                      backgroundColor: stateTheme.others.codeblockcolor,
+                    },
+                    fence: {
+                      color: stateTheme.others.text,
+                      backgroundColor: stateTheme.others.codeblockcolor,
+                    },
+                    code_inline: {
+                      color: stateTheme.others.text,
+                      backgroundColor: stateTheme.others.codeblockcolor,
+                      fontSize: 20,
+                      fontStyle: 'normal',
+                    },
+                    blockquote: {
+                      color: stateTheme.others.text,
+                      backgroundColor: stateTheme.others.codeblockcolor,
+                      fontStyle: 'italic',
+                    },
+                    heading3: {
+                      fontWeight: 'bold',
+                    },
+                    heading2: {
+                      fontWeight: 'bold',
+                    },
+                    list_item: {
+                      color: stateTheme.others.text,
+                    },
+                  }}>
+                  {page}
+                </Markdown>
+              </View>
             </Card>
           </ScrollView>
         ) : (
