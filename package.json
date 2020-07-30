@@ -14,7 +14,6 @@
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/clipboard": "^1.2.3",
     "@react-native-community/masked-view": "^0.1.10",
-    "@react-navigation/drawer": "^5.8.7",
     "@react-navigation/native": "^5.7.2",
     "@react-navigation/stack": "^5.8.0",
     "compare-versions": "^3.6.0",

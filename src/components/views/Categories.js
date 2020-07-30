@@ -195,7 +195,12 @@ export default React.memo(function Categories(props) {
               top = 0;
             }
             return (
-              <CardView item={item} top={top} navigation={props.navigation} />
+              <CardView
+                item={item}
+                top={top}
+                navigation={props.navigation}
+                jumpTo={props.jumpTo}
+              />
             );
           }}
         />

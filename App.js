@@ -196,7 +196,7 @@ function Main({navigation, route}) {
   ]);
 
   // ROUTES - Categories
-  const renderScene = ({route}) => {
+  const renderScene = ({route, jumpTo}) => {
     if (Math.abs(index - routes.indexOf(route)) > 2) {
       return <View />;
     }
@@ -207,6 +207,7 @@ function Main({navigation, route}) {
         banner={banner}
         closeAllBanners={closeBanners}
         stateTheme={stateTheme}
+        jumpTo={jumpTo}
       />
     );
   };

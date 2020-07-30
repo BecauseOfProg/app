@@ -83,7 +83,11 @@ export default React.memo(function CardView(props) {
               {moment.unix(props.item.timestamp).format('DD/MM/YYYY')}
             </Text>
           </Chip>
-          <Chip mode="flat">
+          <Chip
+            mode="flat"
+            onPress={() => {
+              props.jumpTo(props.item.category);
+            }}>
             <Text style={{fontFamily: 'Roboto-Light'}}>
               {props.item.category}
             </Text>
