@@ -297,8 +297,12 @@ function Main({navigation, route}) {
         onChangeText={(a) => setQuery(a)}
         value={query}
         placeholder={I18n.t('searchBar')}
-        onIconPress={() => navigation.push('Search', {search: query})}
-        onSubmitEditing={() => navigation.push('Search', {search: query})}
+        onIconPress={() =>
+          navigation.push('Search', {search: query, mode: 'search'})
+        }
+        onSubmitEditing={() =>
+          navigation.push('Search', {search: query, mode: 'search'})
+        }
         inputStyle={{fontSize: 12, padding: 5}}
         style={{flex: 1, height: 30, marginLeft: 10}}
       />

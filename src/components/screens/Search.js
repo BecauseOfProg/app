@@ -22,6 +22,7 @@ export default React.memo(function Search({route, navigation}) {
   const [val, setValues] = useState(null);
   const [banner, setBanner] = useState(false);
   const [update, setUpdate] = useState(false);
+  const [title, setTitle] = useState('search');
 
   const stateTheme = useSelector((state) => state.theme);
 
@@ -31,8 +32,17 @@ export default React.memo(function Search({route, navigation}) {
   }, []);
 
   function getPosts() {
+    let tmp = 'search';
+    if (route.params.mode !== undefined) {
+      tmp = route.params.mode;
+      if (tmp === 'search') {
+        setTitle(route.params.search);
+      } else {
+        setTitle(route.params.displayName);
+      }
+    }
     if (route.params.search.trim() !== undefined) {
-      fetch(`${config.api}blog-posts?search=${route.params.search.trim()}`, {
+      fetch(`${config.api}blog-posts?${tmp}=${route.params.search.trim()}`, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -68,7 +78,7 @@ export default React.memo(function Search({route, navigation}) {
           />
 
           <Appbar.Content
-            title={'BecauseOfProg : ' + route.params.search}
+            title={'BecauseOfProg : ' + title}
             color="#e33733"
             style={{flex: 1}}
           />

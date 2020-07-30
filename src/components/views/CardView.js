@@ -73,6 +73,13 @@ export default React.memo(function CardView(props) {
             justifyContent: props.category === 'global' ? 'space-around' : null,
           }}>
           <Chip
+            onPress={() => {
+              props.navigation.push('Search', {
+                search: props.item.author.username,
+                mode: 'author',
+                displayName: props.item.author.displayname,
+              });
+            }}
             avatar={<Image source={{uri: props.item.author.picture}} />}
             mode="flat">
             <Text style={{fontFamily: 'Roboto-Light'}}>
