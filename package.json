@@ -65,7 +65,6 @@
     "eslint": "^7.5.0",
     "jest": "^26.1.0",
     "metro-react-native-babel-preset": "^0.61.0",
-    "npm-check-updates": "^7.0.2",
     "react-test-renderer": "16.13.1"
   },
   "jest": {
