@@ -17,3 +17,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           body_path: './changelog.md'
+          name: Release ${{ github.ref }}
+          prerelease: false
+          draft: false
