@@ -50,7 +50,8 @@ jobs:
           remote: uploads
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          privateKey: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_KEY_PASSWORD }}
           port: ${{ secrets.PORT }}
 
       - name: Discord Webhook
