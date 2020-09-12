@@ -31,6 +31,12 @@ jobs:
         run: |
           cd android && chmod +x gradlew && ./gradlew assembleRelease
 
+      - name: Auto tag
+      - uses: Klemensas/action-autotag@stable
+        with:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          tag_prefix: "v"
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
