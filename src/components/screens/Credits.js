@@ -95,7 +95,9 @@ export default React.memo(function Credits({route, navigation}) {
               <SvgUri
                 width={100}
                 height={100}
-                uri={config.cdn + 'sites/becauseofprog.fr/assets/logos/bop.svg'}
+                uri={
+                  config.cdn + '/sites/becauseofprog.fr/assets/logos/bop.svg'
+                }
               />
             </Animatable.View>
           </Animated.View>
@@ -126,7 +128,7 @@ export default React.memo(function Credits({route, navigation}) {
                   }}
                   onPress={() =>
                     Linking.openURL(
-                      'https://twitter.com/kop_of_tea',
+                      'https://twitter.com/kernoeb',
                     ).catch(() => {})
                   }>
                   @kernoeb
@@ -149,7 +151,7 @@ export default React.memo(function Credits({route, navigation}) {
                   textDecorationLine: 'underline',
                   marginBottom: 10,
                 }}>
-                {config.url.slice(0, -1)}
+                {config.url}
               </Text>
               {archs.map((v, i) => {
                 return i < archs.length - 1 ? (

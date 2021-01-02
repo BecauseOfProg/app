@@ -37,7 +37,7 @@ import {changeTheme, readArticles} from '../../redux/reducer';
 import I18n from '../utils/i18n';
 import config from '../../../configuration.json';
 
-const WEBSITE_ROOT = config.url + 'article/';
+const WEBSITE_ROOT = config.url + '/article/';
 
 async function shareURL(url) {
   try {
@@ -134,7 +134,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
   }
 
   function getContent() {
-    fetch(config.api + 'blog-posts/' + route.params.url, {
+    fetch(config.api + '/blog-posts/' + route.params.url, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

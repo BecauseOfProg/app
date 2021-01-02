@@ -1,15 +1,20 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {Appbar, Banner, Provider as PaperProvider} from 'react-native-paper';
-
-import 'react-native-gesture-handler';
-
 import {
   ActivityIndicator,
   Dimensions,
   FlatList,
   SafeAreaView,
+  View,
 } from 'react-native';
+import {
+  Appbar,
+  Banner,
+  Provider as PaperProvider,
+  Title,
+} from 'react-native-paper';
+
+import 'react-native-gesture-handler';
 import withPreventDoubleClick from '../utils/withPreventDoubleClick';
 
 import {useSelector} from 'react-redux';
@@ -51,7 +56,7 @@ export default React.memo(function Search({route, navigation}) {
       fetch(
         `${
           config.api
-        }blog-posts?page=${page}&${tmp}=${route.params.search.trim()}`,
+        }/blog-posts?page=${page}&${tmp}=${route.params.search.trim()}`,
         {
           method: 'GET',
           headers: {
@@ -62,6 +67,11 @@ export default React.memo(function Search({route, navigation}) {
       )
         .then((response) => response.json())
         .then((responseData) => {
+          if (responseData.pages === 0) {
+            setValues([]);
+            setLoading(false);
+            return;
+          }
           if (page <= responseData.pages) {
             let j;
             if (page === 1) {
@@ -123,6 +133,18 @@ export default React.memo(function Search({route, navigation}) {
             size="large"
             color="#e33733"
           />
+        )}
+
+        {val && !val.length && (
+          <View
+            style={{
+              flex: 1,
+              marginTop: 50,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Title>{I18n.t('noResult')}</Title>
+          </View>
         )}
 
         <FlatList

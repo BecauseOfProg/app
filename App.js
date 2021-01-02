@@ -102,7 +102,7 @@ function Main({navigation, route}) {
       })
       .catch(() => {});
 
-    fetch(config.cdn + 'sites/becauseofprog.fr/app/output-metadata.json')
+    fetch(config.cdn + '/sites/becauseofprog.fr/app/output-metadata.json')
       .then((response) => response.json())
       .then((responseData) => {
         try {
@@ -235,7 +235,7 @@ function Main({navigation, route}) {
 
   useEffect(() => {
     if (searchBar && sb.current != null) {
-      sb.current.focus();
+      // sb.current.focus(); // TODO Wait for fix
     }
   }, [searchBar]);
 
@@ -255,7 +255,7 @@ function Main({navigation, route}) {
         <SvgUri
           width={45}
           height={45}
-          uri={config.cdn + 'sites/becauseofprog.fr/assets/logos/bop.svg'}
+          uri={config.cdn + '/sites/becauseofprog.fr/assets/logos/bop.svg'}
         />
       </TouchableOpacity>
       <Appbar.Content
@@ -419,7 +419,7 @@ function Main({navigation, route}) {
             {
               label: I18n.t('download'),
               onPress: () =>
-                Linking.openURL(config.url + 'page/app')
+                Linking.openURL(config.url + '/page/app')
                   .then(() => {})
                   .catch(() => {}),
             },
