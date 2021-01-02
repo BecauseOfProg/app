@@ -66,9 +66,9 @@ export default React.memo(function Categories(props) {
     let page = currentPage;
     let url;
     if (props.categoryTitle === 'global') {
-      url = `${config.api}blog-posts?page=${page}`;
+      url = `${config.api}/blog-posts?page=${page}`;
     } else {
-      url = `${config.api}blog-posts?page=${page}&category=${props.categoryTitle}`;
+      url = `${config.api}/blog-posts?page=${page}&category=${props.categoryTitle}`;
     }
 
     setTimeout(() => {

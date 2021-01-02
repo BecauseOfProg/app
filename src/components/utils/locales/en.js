@@ -11,6 +11,7 @@ export default {
   download: 'Download',
   copyUrl: 'Copy the URL',
   share: 'Partager',
+  noResult: 'No result',
   offlineArticle: 'Offline article',
   copiedUrl: 'URL copied to clipboard',
   publishedOn: 'Published by',

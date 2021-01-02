@@ -11,6 +11,7 @@ export default {
   download: 'Télécharger',
   copyUrl: "Copier l'url",
   share: 'Partager',
+  noResult: 'Aucun résultat',
   offlineArticle: 'Article hors connexion',
   copiedUrl: 'URL copiée dans le presse-papier',
   publishedOn: 'Publié par',

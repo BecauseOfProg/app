@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install npm dependencies
+      - name: Install yarn dependencies
         run: |
-          npm install
+          yarn install
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
@@ -23,9 +23,9 @@ jobs:
           echo $version
           echo "::set-output name=version::$version"
 
-      - name: Install npm dependencies
+      - name: Install yarn dependencies
         run: |
-          npm install
+          yarn install
 
       - name: Build Android Release
         run: |
