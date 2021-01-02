@@ -15,3 +15,9 @@ jobs:
       - name: Build Android Release
         run: |
           cd android && chmod +x gradlew && ./gradlew assembleRelease
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: apk.zip
+          path: android/app/build/outputs/apk/release/
