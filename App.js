@@ -59,7 +59,6 @@ function Main({navigation, route}) {
   const [query, setQuery] = useState('');
   const [menu, setMenu] = useState(false);
   const [snackbar, setSB] = useState(false);
-  const [snackbarcache, setSBCache] = useState(false);
   const [snackbarcachearticle, setSBCacheArticle] = useState(false);
 
   const stateTheme = useSelector((state) => state.theme);
@@ -339,15 +338,6 @@ function Main({navigation, route}) {
         duration={2000}
         onDismiss={() => setSB(false)}>
         {I18n.t('themeChanged')}
-      </Snackbar>
-
-      <Snackbar
-        style={{marginLeft: 15, marginRight: 15}}
-        theme={stateTheme.theme}
-        visible={snackbarcache}
-        duration={2000}
-        onDismiss={() => setSBCache(false)}>
-        {I18n.t('savedInCache')}
       </Snackbar>
 
       <Snackbar

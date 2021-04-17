@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import 'react-native-get-random-values';
 import {
   ActivityIndicator,
-  Dimensions,
   ImageBackground,
   Linking,
   SafeAreaView,
@@ -13,7 +12,6 @@ import {
   View,
 } from 'react-native';
 import Markdown from 'react-native-markdown-display';
-import AutoHeightWebView from 'react-native-autoheight-webview';
 import FitImage from 'react-native-fit-image';
 import ImageViewing from 'react-native-image-viewing';
 
@@ -69,8 +67,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
   const [modalPicture, setModalPicture] = useState(false);
 
   const [snackbarhc, setSBHc] = useState(false);
-  const [snackbarcache, setSBCache] = useState(false);
-  const [snackbarclipboard, setSBClipboard] = useState(false);
+  const [snackbarClipboard, setSBClipboard] = useState(false);
   const [snackbar, setSB] = useState(false);
 
   const [allImages, setAllImages] = useState([]);
@@ -116,7 +113,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
     setAV(true);
   }
 
-  function saveCache(responseData, showSnackbar) {
+  function saveCache(responseData) {
     AsyncStorage.getItem('@cacheArticlesContent').then((b) => {
       if (b == null || JSON.parse(b)) {
         cache
@@ -124,11 +121,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
             '@offline_post_' + route.params.url,
             JSON.stringify(responseData),
           )
-          .then((r) => {
-            if (showSnackbar) {
-              setSBCache(true);
-            }
-          });
+          .then(() => {});
       }
     });
   }
@@ -154,18 +147,16 @@ export default React.memo(function MyWebComponent({route, navigation}) {
           .catch(() => {});
 
         cache.get('@offline_post_' + route.params.url).then((value) => {
-          if (value !== undefined && value !== null) {
+          if (value != null) {
             if (value !== JSON.stringify(responseData)) {
-              saveCache(responseData, true);
-            } else {
-              saveCache(responseData, false);
+              saveCache(responseData);
             }
           } else {
-            saveCache(responseData, true);
+            saveCache(responseData);
           }
         });
       })
-      .catch((err) => {
+      .catch(() => {
         cache.get('@offline_post_' + route.params.url).then((value) => {
           if (value !== undefined && value !== null) {
             setEverything(JSON.parse(value));
@@ -250,15 +241,7 @@ export default React.memo(function MyWebComponent({route, navigation}) {
       <Snackbar
         style={{marginLeft: 15, marginRight: 15}}
         theme={stateTheme.theme}
-        visible={snackbarcache}
-        duration={500}
-        onDismiss={() => setSBCache(false)}>
-        {I18n.t('savedInCache')}
-      </Snackbar>
-      <Snackbar
-        style={{marginLeft: 15, marginRight: 15}}
-        theme={stateTheme.theme}
-        visible={snackbarclipboard}
+        visible={snackbarClipboard}
         duration={500}
         onDismiss={() => setSBClipboard(false)}>
         {I18n.t('copiedUrl')}
